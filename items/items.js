@@ -4,7 +4,6 @@ const express = require('express')
 const cors = require('cors')
 const path = require('path')
 const axios = require('axios');
-// const stub = require('jstest')
 
 const app = express()
 const port = process.env.REVIEW_PORT || 4002
@@ -91,8 +90,6 @@ axios.post('http://localhost:2525/imposters', secondPost)
   });
 
 // example item structures.
-// items["0"]
-// items["0"].comments.append({dog: "Hello"});
 const items = {
     "0": {
         imageURL: "https://ychef.files.bbci.co.uk/976x549/p03lcphh.jpg",
@@ -259,7 +256,7 @@ if (process.platform === "win32") {
   }
   
   process.on("SIGINT", async function () {
-    //graceful shutdown
+    // graceful shutdown
     await axios.delete('http://localhost:2525/imposters/4545');
     await axios.delete('http://localhost:2525/imposters/5555');
     process.exit();
