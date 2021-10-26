@@ -26,7 +26,7 @@ let users = {
 
 app.get('/api/users/favorites', (req, res) => {
     if (users.hasOwnProperty(req.query.username)) {
-        res.status(200).send(users[req.query.username]);
+        res.status(200).send(users[req.query.username].favorites);
     } else {
         res.status(404).end();
     }
@@ -38,14 +38,8 @@ app.post('/api/users/favorite_item', (req, res) => {
         res.status(400).end()
     } else {
         if (users.hasOwnProperty(req.body.username)) {
-            // console.log("In users.");
             let favorites = users[req.body.username].favorites;
             console.log(favorites);
-            // for (let i = 0; i < favorites.length; i++) {
-            //     if (req.body.item_id === favorites[i]) {
-            //         res.status(404).send(users);
-            //     }
-            // }
             if (!favorites.includes(req.body.item_id)) {
                 users[req.body.username].favorites.push(req.body.item_id);
                 res.status(201).send(users);
@@ -93,9 +87,6 @@ if (process.platform === "win32") {
   }
   
   process.on("SIGINT", async function () {
-    // graceful shutdown
-    //await axios.delete('http://localhost:2525/imposters/4545');
-    //await axios.delete('http://localhost:2525/imposters/5555');
     process.exit();
   });
 
