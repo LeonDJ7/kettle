@@ -16,12 +16,14 @@ const users = {
     "person" : {password: "abcde", sessionId: null}
 }
 
-app.post('/api/auth/sign_up', (req, res) => {
+app.post('/api/auth/sign_up', async (req, res) => {
     const username = req.body.user
     const password = req.body.password
 
+    if(username === undefined || password === undefined) res.status(400).end()
+
     if(users.hasOwnProperty(username)){
-        res.status(403).send({status: 'user-already-exists'})
+        res.status(403).send({message: 'user-already-exists'})
     }
 
     //skeleton for future async functionality 
@@ -30,10 +32,10 @@ app.post('/api/auth/sign_up', (req, res) => {
             password, 
             sessionId: null
         }
-        res.status(201).send({status: 'user-created'})
+        res.status(201).send({message: 'user-created'})
     }
     catch(err) {
-        res.status(500).send({status: 'error-processing-request'})
+        res.status(500).send({message: 'error-processing-request'})
     }
 })
 
@@ -41,26 +43,31 @@ app.get('/api/auth/log_in', (req, res) => {
     const username = req.query.user
     const password = req.query.password
 
+    if(username === undefined || password === undefined) res.status(400).end()
+
     if(!users.hasOwnProperty(username)) {
-        res.status(404).send({status: 'user-not-found'})
+        res.status(404).send({message: 'user-not-found'})
     }
     else if(password === users[username].password) {
         users[username].sessionId = Math.random()
-        res.status(200).send({status: 'login-successful'})
+        res.status(200).send({message: 'login-successful'})
     }
     else {
-        res.status(403).send({status: 'incorrect-password'})
+        res.status(403).send({message: 'incorrect-password'})
     }
 })
 
 app.get('/api/auth/log_out', (req, res) => {
     const username = req.query.user
+
+    if(username === undefined) res.status(400).end()
+
     if(!users.hasOwnProperty(username)) {
-        res.status(404).send({status: 'user-not-found'})
+        res.status(404).send({message: 'user-not-found'})
     }
     else {
         users[username].sessionId = null
-        res.status(200).send({status: 'logged-out'})
+        res.status(200).send({message: 'logged-out'})
     }
 })
 

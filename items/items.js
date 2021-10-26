@@ -4,7 +4,6 @@ const express = require('express')
 const cors = require('cors')
 const path = require('path')
 const axios = require('axios');
-// const stub = require('jstest')
 
 const app = express()
 const port = process.env.REVIEW_PORT || 4002
@@ -148,9 +147,9 @@ const items = {
 app.get('/items/get_item', (req, res) => {
     let itemID = String(req.query.item_id);
     if (items.hasOwnProperty(itemID)) {
-        res.send(items[itemID]);
+        res.status(200).send(items[itemID]);
     } else {
-        res.end();
+        res.status(404).end();
     }
 })
 
@@ -160,75 +159,88 @@ app.post('/items/new_item', (req, res) => {
     let description = req.body.description;
     let creator = req.body.creator;
     let yearCreated = req.body.yearCreated;
-    let itemID = String(Object.keys(items).length);
+    if (imageURL === undefined || name === undefined || description === undefined 
+        || creator === undefined || yearCreated === undefined
+      ) { 
+        res.status(400).end();
+    } else {
+      // check if all the info sent
+      let itemID = String(Object.keys(items).length);
 
-    items[itemID] = {
-        imageURL: imageURL,
-        name: name, 
-        description: description, 
-        creator: creator,
-        yearCreated: yearCreated,
-        comments: [],
-        tags: []
-    };
-
-    // this one isn't moderated. once the page is created,
-    // users can report it. there is too much art with
-    // otherwise reportable names
-
-    res.send(items[itemID]);
+      items[itemID] = {
+          imageURL: imageURL,
+          name: name, 
+          description: description, 
+          creator: creator,
+          yearCreated: yearCreated,
+          comments: [],
+          tags: []
+      };
+      res.status(201).send(items[itemID]);
+    }
 })
 
 app.post('/items/:item_id/add_tag', async (req, res) => {
     let userID = req.body.userID;
     let tag = req.body.tag;
     let itemID = req.params.item_id;
-
-    if (items.hasOwnProperty(itemID)) {
-      const response = await axios.post('http://localhost:4545/moderation/new_tag', { 
-          tag 
-        })
-      console.log(response.data);
-      if (response.data.passed_moderation == "OK") {
-                    items[itemID].tags.push(
-                        { 
-                            votes: 1,
-                            tag, // moderate the tag
-                            tagID: items[itemID].tags.length
-                        });
-        } else {
-          console.log("Tag failed moderation");
-        }
+    if (userID === undefined || tag === undefined) {
+      res.status(400).end();
+    } else {
+      if (items.hasOwnProperty(itemID)) {
+        const response = await axios.post('http://localhost:4545/moderation/new_tag', { 
+            tag 
+          })
+        console.log(response.data);
+        if (response.data.passed_moderation === "OK") {
+                      items[itemID].tags.push(
+                          { 
+                              votes: 1,
+                              tag, // moderate the tag
+                              tagID: items[itemID].tags.length
+                          });
+                      res.status(201).send(items[itemID].tags);
+          } else {
+            console.log("Tag failed moderation");
+            res.status(400).end();
+          }
+      } else {
+        res.status(404).end();
+      }
     }
-
-    res.send(items);
 })
 
 app.post('/items/:item_id/add_comment', async (req, res) => {
     let userID = req.body.userID;
     let text = req.body.text;
     let itemID = String(req.params.item_id);
-    if (items.hasOwnProperty(itemID)) {
-
-      const response = await axios.post('http://localhost:5555/moderation/new_comment', {
-            text,
-        });
-      console.log(response.data);
-      if (response.data.passed_moderation == "OK") {
-        items[itemID].comments.push({ 
-          text,  
-          likes: 0,
-          dislikes: 0,
-          userID,
-          commentID: items[itemID].comments.length
-        });
+    if (userID === undefined || text === undefined) {
+      res.status(400).end()
+    } else {
+      if (items.hasOwnProperty(itemID)) {
+        const response = await axios.post('http://localhost:5555/moderation/new_comment', {
+              text,
+          });
+        console.log(response.data);
+        if (response.data.passed_moderation === "OK") {
+          items[itemID].comments.push({ 
+            text,  
+            likes: 0,
+            dislikes: 0,
+            userID,
+            commentID: items[itemID].comments.length
+          });
+          res.status(201).send(items[itemID].comments); 
+        } else {
+          res.status(400).end();
+        }
+      } else {
+        res.status(404).end();
       }
     }
-
-    res.send(items); 
 })
 
-// the below code is copied from stackoverflow!
+// !!!the below code is copied from stackoverflow!!!
 // it makes it so that I can control c out of the 
 // process while running it on windows, which was
 // working fine on ubuntu for me but not on windows
@@ -244,7 +256,7 @@ if (process.platform === "win32") {
   }
   
   process.on("SIGINT", async function () {
-    //graceful shutdown
+    // graceful shutdown
     await axios.delete('http://localhost:2525/imposters/4545');
     await axios.delete('http://localhost:2525/imposters/5555');
     process.exit();
