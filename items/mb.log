@@ -1,0 +1,11 @@
+{"level":"info","message":"[mb:2525] mountebank v2.5.0 now taking orders - point your browser to http://localhost:2525/ for help","timestamp":"2021-10-25T23:34:53.731Z"}
+{"level":"info","message":"[mb:2525] POST /imposters","timestamp":"2021-10-25T23:35:40.903Z"}
+{"level":"info","message":"[http:5555] Open for business...","timestamp":"2021-10-25T23:35:40.927Z"}
+{"level":"info","message":"[mb:2525] POST /imposters","timestamp":"2021-10-25T23:35:40.936Z"}
+{"level":"info","message":"[http:4545] Open for business...","timestamp":"2021-10-25T23:35:40.940Z"}
+{"level":"info","message":"[http:4545] ::ffff:127.0.0.1:51223 => POST /moderation/new_tag","timestamp":"2021-10-25T23:36:18.004Z"}
+{"level":"info","message":"[mb:2525] DELETE /imposters/4545","timestamp":"2021-10-25T23:36:23.109Z"}
+{"level":"info","message":"[http:4545] Ciao for now","timestamp":"2021-10-25T23:36:23.111Z"}
+{"level":"info","message":"[mb:2525] DELETE /imposters/5555","timestamp":"2021-10-25T23:36:23.115Z"}
+{"level":"info","message":"[http:5555] Ciao for now","timestamp":"2021-10-25T23:36:23.117Z"}
+{"level":"info","message":"[mb:2525] Adios - see you soon?","timestamp":"2021-10-25T23:36:30.660Z"}
