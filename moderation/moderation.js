@@ -23,25 +23,34 @@ app.use(express.json())
 
 //the post request either passed_moderation : "OK" || "FAIL"
 
-let listOfBadWords = ["stupid","fuck"]
+//let listOfBadWords = ["stupid","fuck"]
+let Filter = require('bad-words'),
+    filter = new Filter();
 
 app.post('/moderation/new_tag', (req, res) => {
     let tag = req.body.tag
-    if(listOfBadWords.includes(tag.toLowerCase())) {
+    if(filter.clean(tag) !== tag){
         res.send({passed_moderation : "FAIL"})
     } else {
         res.send({passed_moderation : "OK"})
     }
 })
+    // if(listOfBadWords.includes(tag.toLowerCase())) {
+    //     res.send({passed_moderation : "FAIL"})
+    // } else {
+    //     res.send({passed_moderation : "OK"})
+    // }
 
 app.post('/moderation/new_comment', (req, res) => {
     let comment = req.body.text
     let bad = false
-    for(let i = 0; i <listOfBadWords.length; i++) {
-        if(comment.toLowerCase().includes(listOfBadWords[i])) {
-            bad = true
-        }
+    if(filter.clean(comment) !== comment){
+        bad = true
     }
+    // for(let i = 0; i <listOfBadWords.length; i++) {
+    //     if(comment.toLowerCase().includes(listOfBadWords[i])) {
+    //         bad = true
+    //     }
     if(bad === true){
         res.send({passed_moderation : "FAIL"})
     } else {
