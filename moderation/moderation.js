@@ -23,7 +23,7 @@ app.use(express.json())
 
 //the post request either passed_moderation : "OK" || "FAIL"
 
-let listOfBadWords = ["bitch","fuck","pussy"]
+let listOfBadWords = ["stupid","fuck"]
 
 app.post('/moderation/new_tag', (req, res) => {
     let tag = req.body.tag
