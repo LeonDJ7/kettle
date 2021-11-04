@@ -6,7 +6,7 @@ const path = require('path')
 const { receiveMessageOnPort } = require('worker_threads')
 
 const app = express()
-const port = process.env.USER_PORT || 5555
+const port = process.env.USER_PORT || 4004
 
 app.use(cors())
 app.use(express.json())
