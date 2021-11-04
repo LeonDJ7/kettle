@@ -15,19 +15,19 @@ let ports = {
 app.post("api/events", (req, res) => {
   const event = req.body;
 
-  axios.post(`http://localhost:${auth}/events`, event).catch((err) => {
+  axios.post(`http://localhost:${auth}/api/events`, event).catch((err) => {
     console.log(err.message);
   });
-  axios.post(`http://localhost:${discover}/events`, event).catch((err) => {
+  axios.post(`http://localhost:${discover}/api/events`, event).catch((err) => {
     console.log(err.message);
   });
-  axios.post(`http://localhost:${items}/events`, event).catch((err) => {
+  axios.post(`http://localhost:${items}/api/events`, event).catch((err) => {
     console.log(err.message);
   });
-  axios.post(`http://localhost:${users}/events`, event).catch((err) => {
+  axios.post(`http://localhost:${users}/api/events`, event).catch((err) => {
     console.log(err.message);
   });
-  axios.post(`http://localhost:${moderation}/events`, event).catch((err) => {
+  axios.post(`http://localhost:${moderation}/api/events`, event).catch((err) => {
     console.log(err.message);
   });
   res.send({ status: "OK" });
