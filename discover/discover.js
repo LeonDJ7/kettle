@@ -4,10 +4,9 @@ const express = require('express')
 const cors = require('cors')
 const path = require('path')
 const axios = require('axios');
-// const stub = require('jstest')
 
 const app = express()
-const port = process.env.REVIEW_PORT || 4001
+const port = process.env.DISCOVER_PORT || 4001
 
 app.use(express.urlencoded({ extended: true }))
 app.use(cors())
@@ -124,7 +123,16 @@ app.post('/api/discover/recommendations', (req, res) => {
 
     } catch (err) { res.status(500).send(err) }
 
-    
+})
+
+app.post('/api/events', (req, res) => {
+
+    try {
+
+        console.log('event: ', req.body);
+        res.status(200).json(req.body);
+
+    } catch (err) { res.status(500).send(err) }
 
 })
 

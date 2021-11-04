@@ -6,7 +6,7 @@ const path = require('path')
 const axios = require('axios');
 
 const app = express()
-const port = process.env.REVIEW_PORT || 4002
+const port = process.env.ITEMS_PORT || 4002
 
 app.use(express.urlencoded())
 app.use(cors())

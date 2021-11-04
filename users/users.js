@@ -5,7 +5,7 @@ const cors = require('cors')
 const path = require('path')
 
 const app = express()
-const port = process.env.REVIEW_PORT || 4003
+const port = process.env.USERS_PORT || 4003
 
 app.use(express.urlencoded())
 app.use(cors())
