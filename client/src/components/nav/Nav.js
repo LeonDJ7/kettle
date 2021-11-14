@@ -5,18 +5,15 @@ import kettleLogo from '../../images/kettle_logo.png'
 
 import {
     Menu,
-    Button,
     MenuItem,
-    Icon,
-    TextField, InputAdornment,
-    makeStyles,createStyles, Theme
+    makeStyles,createStyles
 } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
 
         root: {
-            backgroundColor: 'gray',
+            backgroundColor: 'lightgray',
             borderBottom: '8px solid lightcoral',
             display: 'flex',
             alignItems: 'center',
@@ -30,11 +27,12 @@ const useStyles = makeStyles((theme) =>
             display: 'flex',
             flexDirection: 'row',
             alignItems: 'center',
+            justifyContent: 'center',
             gap: '1rem',
             [theme.breakpoints.down('xs')]: {
                 display: 'none',
             },
-            height: '100%'
+            height: '100%',
         },
 
         optionsButton: {
@@ -43,9 +41,9 @@ const useStyles = makeStyles((theme) =>
             cursor: 'pointer',
             fontWeight: 600,
             fontSize: '28px',
-            color: 'white',
+            color: 'dimgrey',
             position: 'relative',
-            height: '100%'
+            height: '100%',
         },
 
         selectedIndicator: {
@@ -112,11 +110,11 @@ const Nav = (props) => {
                 </Link>
 
                 <Link to="/user_profile" style={{ height: '100%'}}>
-                    { pathname !== '#/user_profile' && <div class={classes.optionsButton} id='3' onClick={() => {setPathname('#/user_profile')}} >
-                        <div style={{ background: 'url(../../images/account_box.png)', width: '48px', height: '48px' }} ></div>
+                    { pathname !== '#/user_profile' && <div class={classes.optionsButton} style={{display: 'flex', alignItems: 'center'}} id='3' onClick={() => {setPathname('#/user_profile')}} >
+                        <img src={accountBox} alt='' style={{ width: '48px', height: '48px' }}></img>
                     </div> }
-                    { pathname === '#/user_profile' && <div style={{ outline: '8px solid white' }} class={classes.optionsButton} id='3' onClick={() => {setPathname('#/user_profile')}}> 
-                        <div style={{ background: 'url(../../images/account_box.png)', width: '48px', height: '48px' }} ></div>
+                    { pathname === '#/user_profile' && <div style={{ display: 'flex', alignItems: 'center', outline: '8px solid white' }} class={classes.optionsButton} id='3' onClick={() => {setPathname('#/user_profile')}}> 
+                        <img src={accountBox} alt='' style={{ width: '48px', height: '48px' }}></img>
                     </div> }
                 </Link>
                 
@@ -181,7 +179,7 @@ const Nav = (props) => {
         <div class={classes.root} >
 
             <Link to="/" class={classes.logoLink} >
-                <img class={classes.logo} src={kettleLogo} alt=''/>
+                <img class={classes.logo} onClick={() => {setPathname('#/')}} src={kettleLogo} alt=''/>
             </Link>
 
             <NavMenu/>

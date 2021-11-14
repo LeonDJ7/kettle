@@ -121,6 +121,8 @@ app.post('/api/discover/recommendations', (req, res) => {
 
         res.status(200).json(tags) // for now just send back tags
 
+        axios
+
     } catch (err) { res.status(500).send(err) }
 
 })

@@ -1,4 +1,4 @@
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route } from 'react-router';
 import Item from './components/item pages/Item';
 import Search from './components/search items/Search';
 import Request from './components/request item/Request';

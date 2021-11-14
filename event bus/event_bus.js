@@ -12,6 +12,22 @@ const port = process.env.EVENT_BUS_PORT || 4006
 }
 */
 
+// EVENT TYPES
+
+// comment_add : item service sends recieved comment to moderation
+// tag_add : item service sends recieved tag to moderation
+// tag_vote : items ms to users ms
+// comment_vote : items ms to users ms
+
+// user_add : auth sends added user to user ms
+
+
+// TBD
+
+// database_add : specify where and what is being changed in data object, sent to database ms
+// or
+// each have their own database
+
 let ports = {
     auth: '4000', 
     discover: '4001',
@@ -22,11 +38,13 @@ let ports = {
 }
 
 app.post("api/events", (req, res) => {
+    
     const event = req.body;
 
     axios.post(`http://localhost:${ports.auth}/api/events`, event).catch((err) => {
         console.log(err.message);
     });
+    
     axios.post(`http://localhost:${ports.discover}/api/events`, event).catch((err) => {
         console.log(err.message);
     });

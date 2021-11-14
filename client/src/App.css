@@ -2,6 +2,11 @@
   text-align: center;
 }
 
+.header {
+    height: 100vh;
+    background-color: #EACCCC;
+}
+
 .logo {
   width: 48px;
 }
