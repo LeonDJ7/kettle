@@ -26,7 +26,7 @@ let users = {
 
 app.get('/api/users/favorites', (req, res) => {
     if (users.hasOwnProperty(req.query.username)) {
-        res.status(200).send(users[req.query.username]);
+        res.status(200).send();
     } else {
         res.status(404).end();
     }
