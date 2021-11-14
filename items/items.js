@@ -15,7 +15,7 @@ app.use(express.json())
 // just in case :), we really don't want duplicate imposters running around!
 // axios.delete('http://localhost:2525/imposters/4545');
 // axios.delete('http://localhost:2525/imposters/5555');
-
+// I won't have to think about the port that I am sending t
 // making stubs
 let postBody = {
     "port": 4545,
@@ -188,6 +188,7 @@ app.post('/items/:item_id/add_tag', async (req, res) => {
       res.status(400).end();
     } else {
       if (items.hasOwnProperty(itemID)) {
+        // the port has changed and this will be irrelevent
         const response = await axios.post('http://localhost:4545/moderation/new_tag', { 
             tag 
           })
@@ -209,6 +210,9 @@ app.post('/items/:item_id/add_tag', async (req, res) => {
       }
     }
 })
+
+// need 2 new posts for when a comment is accepted and when a tag is accepted. 
+// this has to happen later
 
 app.post('/items/:item_id/add_comment', async (req, res) => {
     let userID = req.body.userID;
