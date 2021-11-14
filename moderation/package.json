@@ -1,0 +1,18 @@
+{
+  "name": "moderation",
+  "version": "1.0.0",
+  "description": "## author: Ruby Ramsay",
+  "main": "moderation.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bad-words": "^3.0.4",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "path": "^0.12.7"
+  }
+}
