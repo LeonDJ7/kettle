@@ -16,8 +16,29 @@ app.post('/api/events', (req, res) => {
 
     try {
 
-        console.log('event: ', req.body);
-        res.status(200).json(req.body);
+        let body = req.body;
+        let type = body.type;
+        let editType = body.data.type;
+        let editData = body.data.data;
+
+        if (type === 'database_add') {
+            
+            if (editType === 'comment_add') {
+
+                /* in editData is 
+                {
+                    userID,
+                    text
+                }
+                */
+
+                // upload to database given editData
+                
+            }
+
+        }
+
+        res.send('OK')
 
     } catch (err) { res.status(500).send(err) }
 

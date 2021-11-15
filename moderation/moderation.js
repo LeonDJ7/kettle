@@ -58,6 +58,38 @@ app.post('/moderation/new_comment', (req, res) => {
     }
 })
 
+app.post('/api/events', (req, res) => {
+
+    try {
+
+        let body = req.body;
+        let type = body.type;
+        let data = body.data;
+
+        if (type === 'comment_add') {
+
+            // moderate make sure comment is chill
+
+
+
+            // if chill
+
+            const response = await axios.post('http://localhost:4006/events', {
+                type: 'database_add',
+                data: {
+                    type: 'comment_add',
+                    data: data
+                }
+            });
+
+            let data = await response.json()
+
+        }
+
+    } catch (err) { res.status(500).send(err) }
+
+})
+
 app.get('/hello', (req, res) => {
     res.send("hello world")
 })

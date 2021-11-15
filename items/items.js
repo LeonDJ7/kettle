@@ -224,6 +224,19 @@ app.post('/items/:item_id/add_comment', async (req, res) => {
     if (userID === undefined || text === undefined) {
       res.status(400).end()
     } else {
+
+        const response = await axios.post('http://localhost:4006/events', {
+            type: 'comment_add',
+            data: {
+                text: text,
+                userID: userID
+            }
+        });
+
+        let data = await response.json()
+        res.send(data)
+
+        /*
       if (items.hasOwnProperty(itemID)) {
         const response = await axios.post('http://localhost:5555/moderation/new_comment', {
               text,
@@ -244,6 +257,7 @@ app.post('/items/:item_id/add_comment', async (req, res) => {
       } else {
         res.status(404).end();
       }
+      */
     }
 })
 
