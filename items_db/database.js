@@ -10,17 +10,68 @@
 // app.use(cors())
 // app.use(express.json())
 
+// data: {
+//   imageURL: imageURL,
+//   name: name, 
+//   description: description, 
+//   creator: creator,
+//   yearCreated: yearCreated,
+//   comments: [],
+//   tags: []
+// }
+
+const testItem = {
+  id: 13451623,
+  name: "Sam", 
+  //imageURL: "fake.com", 
+  description: "A cool, smart, funny, genius, wow, lots of jokes for every occasion and a smile and a frown.",
+  creator: 12312973,
+  yearCreated: 1998,
+  comments: '[]',
+  tags: '[]'
+};
+
+const testTag = '{"tag": "strange", "userID": 0123176253}'
+const testComment = '{ "text": "i like this enough to see this again" }'
+
+// data: {
+//   text: text,
+//   itemID: itemID,
+//   userID: userID
+// }
+
 const mysql = require('mysql');
 const connection = mysql.createConnection({
   host: 'localhost',
-  user: 'coxsa',
-  password: 'galactic',
+  user: 'root',
+  password: 'samsam98',
   database: 'itemsdb'
 });
 connection.connect((err) => {
   if (err) throw err;
   console.log('Connected!');
+  // connection.query('INSERT INTO items SET ?', testItem, (err, res) => {
+  //   if (err) throw err;
+  //   console.log('Last insert ID: ', res.insertId);
+  // });
+  // trying to append a tag.
+  // connection.query("UPDATE items SET tags = JSON_ARRAY_APPEND(tags , '$', ?) WHERE ID = ?",
+  //                 [testTag, testItem.id],
+  //                 (err, result) => {
+  //                   if (err) throw err;
+  //                 }
+  // )
+  // connection.query("UPDATE items SET comments = JSON_ARRAY_APPEND(comments , '$', ?) WHERE ID = ?",
+  //                 [testComment, testItem.id],
+  //   (err, result) => {
+  //     if (err) throw err;
+  //   }
+  // )
+  // connection.query()
+
 });
+
+
 
 
 

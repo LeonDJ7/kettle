@@ -14,10 +14,13 @@ const port = process.env.EVENT_BUS_PORT || 4006
 
 // EVENT TYPES
 
-// comment_add : item service sends recieved comment to moderation
-// tag_add : item service sends recieved tag to moderation
+// comment_moderate : item service sends recieved comment to moderation
+// tag_moderate: item service sends recieved tag to moderation
 // tag_vote : items ms to users ms
 // comment_vote : items ms to users ms
+// comment_add : sending comment to item db
+// tag_add : sending tag to item db
+// item_add : sending item to item db
 
 // user_add : auth sends added user to user ms
 
