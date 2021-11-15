@@ -12,11 +12,6 @@ app.use(express.urlencoded())
 app.use(cors())
 app.use(express.json())
 
-// just in case :), we really don't want duplicate imposters running around!
-// axios.delete('http://localhost:2525/imposters/4545');
-// axios.delete('http://localhost:2525/imposters/5555');
-// I won't have to think about the port that I am sending t
-// making stubs
 let postBody = {
     "port": 4545,
     "protocol": "http",
@@ -144,16 +139,20 @@ const items = {
     }
 }
 
-app.get('/items/get_item', (req, res) => {
+app.get('/api/items/get_item', (req, res) => {
     let itemID = String(req.query.item_id);
-    if (items.hasOwnProperty(itemID)) {
-        res.status(200).send(items[itemID]);
-    } else {
-        res.status(404).end();
-    }
+    const response = await axios.get('http://localhost:4006/events', {
+      params: {
+        type: 'item_get',
+        itemID: itemID
+      }
+    })
+    .then(function (response) {
+      res.status(200).send(await response.json());
+    })
 })
-
-app.post('/items/new_item', (req, res) => {
+// this one sends the item to the database automatically.
+app.post('/api/items/new_item', (req, res) => {
     let imageURL = req.body.imageURL;
     let name = req.body.name;
     let description = req.body.description;
@@ -164,10 +163,9 @@ app.post('/items/new_item', (req, res) => {
       ) { 
         res.status(400).end();
     } else {
-      // check if all the info sent
-      let itemID = String(Object.keys(items).length);
-
-      items[itemID] = {
+      const response = await axios.post('http://localhost:4006/events', {
+        type: 'item_add',
+        data: {
           imageURL: imageURL,
           name: name, 
           description: description, 
@@ -175,89 +173,70 @@ app.post('/items/new_item', (req, res) => {
           yearCreated: yearCreated,
           comments: [],
           tags: []
-      };
+        }
+      });
       // make a post to the items_db thing 
       // this should be sent to the database
-      res.status(201).send(items[itemID]);
+      res.status(201).end();
+      //res.status(201).send(items[itemID]);
     }
 })
 
-app.post('/items/:item_id/add_tag', async (req, res) => {
+// this one sends the tag to moderation and then to the database.
+app.post('/api/items/:item_id/add_tag', async (req, res) => {
     let userID = req.body.userID;
     let tag = req.body.tag;
     let itemID = req.params.item_id;
     if (userID === undefined || tag === undefined) {
       res.status(400).end();
     } else {
-      if (items.hasOwnProperty(itemID)) {
         // the port has changed and this will be irrelevent
-        const response = await axios.post('http://localhost:4545/moderation/new_tag', { 
-            tag 
-          })
-        console.log(response.data);
-        // I think moderation can then send along to the database!
-        if (response.data.passed_moderation === "OK") {
-                      items[itemID].tags.push(
-                          { 
-                              votes: 1,
-                              tag, // moderate the tag
-                              tagID: items[itemID].tags.length
-                          });
-                      res.status(201).send(items[itemID].tags);
-          } else {
-            console.log("Tag failed moderation");
-            res.status(400).end();
-          }
-      } else {
-        res.status(404).end();
-      }
-    }
+      const response = await axios.post('http://localhost:4006/events', {
+        type: 'tag_add',
+        data: {
+            tag: tag,
+            userID: userID,
+        }
+      });
+
+    let data = await response.json()
+    res.send(data)
+  }
 })
 
-// need 2 new posts for when a comment is accepted and when a tag is accepted. 
-// this has to happen later
-
-app.post('/items/:item_id/add_comment', async (req, res) => {
+app.post('/api/items/:item_id/add_comment', async (req, res) => {
     let userID = req.body.userID;
     let text = req.body.text;
     let itemID = String(req.params.item_id);
     if (userID === undefined || text === undefined) {
       res.status(400).end()
     } else {
-
         const response = await axios.post('http://localhost:4006/events', {
-            type: 'comment_add',
+            type: 'comment_moderate',
             data: {
                 text: text,
-                userID: userID
+                // itemID: itemID,
+                // userID: userID
             }
         });
 
         let data = await response.json()
-        res.send(data)
-
-        /*
-      if (items.hasOwnProperty(itemID)) {
-        const response = await axios.post('http://localhost:5555/moderation/new_comment', {
-              text,
+        // ok so if our data says we are good to go...
+        if (data.passed_moderation === "OK") {
+          // make our post
+          const response = await axios.post('http://localhost:4006/events', {
+            type: 'comment_add',
+            data: {
+                text: text,
+                // itemID: itemID,
+                // userID: userID
+            }
           });
-        console.log(response.data);
-        if (response.data.passed_moderation === "OK") {
-          items[itemID].comments.push({ 
-            text,  
-            likes: 0,
-            dislikes: 0,
-            userID,
-            commentID: items[itemID].comments.length
-          });
-          res.status(201).send(items[itemID].comments); 
+          // do something w/ the response.
+          res.status(200).end();
         } else {
           res.status(400).end();
         }
-      } else {
-        res.status(404).end();
-      }
-      */
     }
 })
 
