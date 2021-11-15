@@ -176,6 +176,8 @@ app.post('/items/new_item', (req, res) => {
           comments: [],
           tags: []
       };
+      // make a post to the items_db thing 
+      // this should be sent to the database
       res.status(201).send(items[itemID]);
     }
 })
@@ -193,6 +195,7 @@ app.post('/items/:item_id/add_tag', async (req, res) => {
             tag 
           })
         console.log(response.data);
+        // I think moderation can then send along to the database!
         if (response.data.passed_moderation === "OK") {
                       items[itemID].tags.push(
                           { 

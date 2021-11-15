@@ -23,6 +23,18 @@ app.post('/api/events', (req, res) => {
 
 })
 
+// WE NEED EACH MICROSERVICE TO HAVE ITS OWN DB THINGY
+
+app.post('/api/new_item_to_db', (req, res) => {
+    // post item to db
+})
+
+app.post('/api/tag_to_db', (req, res) => {
+    // post item to db
+})
+
+app.post()
+
 app.listen(port, () => {
     console.log(`server listening on the port::${port}`)
 })
