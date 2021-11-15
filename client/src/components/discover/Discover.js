@@ -1,20 +1,42 @@
 import React from 'react'
 
 import {
-    makeStyles,createStyles, Button, NativeSelect
+    makeStyles, createStyles, Button, NativeSelect
 } from '@material-ui/core'
+
 import FavoritesList from './FavoritesList';
 
 const useStyles = makeStyles((theme) =>
     createStyles({
 
         root: {
-            padding: '2rem 2rem 2rem 2rem'
+            padding: '2rem 2rem 2rem 2rem',
+            color: '#4A4A4A'
         },
 
         discoverButton: {
+            backgroundColor: '#E5B1B1',
+            border: 'none',
+            width: '10rem',
+            height: '2.6rem',
+            cursor: 'pointer',
+            borderRadius: '3px',
             color: 'white',
-            fontWeight: 600,
+            fontWeight: 800,
+            fontSize: '1rem'
+        },
+
+        favoritesContainer: {
+            display: 'flex',
+            flexDirection: 'row'
+        },
+
+        generateContainer: {
+            display: 'flex',
+            flexDirection: 'row',
+            marginLeft: '2rem',
+            marginTop: '4rem',
+            gap: '1rem'
         }
 
     }),
@@ -66,11 +88,13 @@ const Discover = (props) => {
                 <FavoritesList type='Music' items={dummyData.music}/>
                 <FavoritesList type='Books' items={dummyData.books}/>
             </span>
-            <Button class={classes.discoverButton} onClick={discover}> discover new...</Button>
-            <NativeSelect defaultValue={'select'} onChange={(event) => { setDiscoverType(event.target.value) }} inputProps={{ name: 'age', id: 'uncontrolled-native' }} >
-                <option value={'music'}>music</option>
-                <option value={'books'}>books</option>
-            </NativeSelect>
+            <span class={classes.generateContainer}>
+                <button class={classes.discoverButton} variant="contained" onClick={discover}> discover new...</button>
+                <NativeSelect defaultValue={'select'} onChange={(event) => { setDiscoverType(event.target.value) }} inputProps={{ name: 'age', id: 'uncontrolled-native' }} >
+                    <option value={'music'}>music</option>
+                    <option value={'books'}>books</option>
+                </NativeSelect>
+            </span>
         </div>
     )
 }

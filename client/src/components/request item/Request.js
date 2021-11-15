@@ -4,29 +4,33 @@ import {
     makeStyles,createStyles, Button, TextField
 } from '@material-ui/core'
 
-import { height } from '@mui/system'
-
 const useStyles = makeStyles((theme) =>
     createStyles({
 
         root: {
-            padding: '2rem 2rem 2rem 2rem',
+            padding: '2rem 14rem 2rem 14rem',
             display: 'flex',
             flexDirection: 'column'
         },
 
-        nameInput: {
-            width: '42rem',
-            height: '32rem'
+        formControl: {
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '2rem',
+            marginTop: '6rem'
         },
 
-        descriptionInput: {
-            width: '42rem',
-            height: '32rem'
-        },
-
-        submitButton: {
-
+        requestButton: {
+            alignSelf: 'flex-end',
+            backgroundColor: '#E5B1B1',
+            border: 'none',
+            width: '10rem',
+            height: '2.6rem',
+            cursor: 'pointer',
+            borderRadius: '3px',
+            color: 'white',
+            fontWeight: 800,
+            fontSize: '1rem'
         }
 
     }),
@@ -40,17 +44,20 @@ const Request = (props) => {
     return (
         <div class={classes.root} >
 
-            <TextField class={classes.nameInput} label="Filled" variant="filled">
-            </TextField>
+            <span class={classes.formControl}>
+                <TextField multiline fullWidth rows={1} label="what's it called" variant="filled" sx={{ background: 'rgba(255, 255, 255, .6)'}}>
+                </TextField>
+                
+                <TextField multiline fullWidth rows={12} label="anything else important?" variant="filled" sx={{ background: 'rgba(255, 255, 255, .6)'}}>
+                </TextField>
+
+                <Button class={classes.requestButton} onClick={() => {
+                    // make request to moderator
+                }}>
+                    request
+                </Button>
+            </span>
             
-            <TextField class={classes.descriptionInput} label="Filled" variant="filled">
-            </TextField>
-
-            <Button onClick={() => {
-                // make request to moderator
-            }}>
-
-            </Button>
         </div>
     )
 }

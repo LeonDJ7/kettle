@@ -11,6 +11,7 @@ import {
     TextField,
     Autocomplete,
 } from '@mui/material'
+
 import { Link } from 'react-router-dom'
 
 const useStyles = makeStyles((theme) =>
@@ -57,7 +58,7 @@ const Search = (props) => {
     return (
         <div class={classes.root} >
 
-            <Stack spacing={2} sx={{ width: '32rem', background: 'rgba(255, 255, 255, .2)'}}>
+            <Stack spacing={2} sx={{ width: '32rem', background: 'rgba(255, 255, 255, .6)', borderRadius: '4px'}}>
             
                 <Autocomplete
                     freeSolo
@@ -102,7 +103,7 @@ const dummyData = [
     },
     {
         id: 3,
-        name: "harry potter: the second book",
+        name: "harry potter: the third book",
         artist: "JK Rowling"
     }
 ]

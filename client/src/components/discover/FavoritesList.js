@@ -4,6 +4,9 @@ import {
     makeStyles,createStyles, Checkbox
 } from '@material-ui/core'
 
+import dullStar from '../../images/dull_star.png'
+import litStar from '../../images/lit_star.png'
+
 const useStyles = makeStyles((theme) =>
     createStyles({
 
@@ -13,7 +16,8 @@ const useStyles = makeStyles((theme) =>
 
         itemsList: {
             display: 'flex',
-            flexDirection: 'column'
+            flexDirection: 'column',
+            marginTop: '1rem'
         },
 
         categoryTitle: {
@@ -23,7 +27,13 @@ const useStyles = makeStyles((theme) =>
 
         item: {
             display: 'flex',
-            flexDirection: 'row'
+            flexDirection: 'row',
+            marginTop: '.4rem',
+            cursor: 'pointer'
+        },
+
+        star: {
+            marginRight: '.4rem'
         }
 
     }),
@@ -49,8 +59,10 @@ const FavoritesList = (props) => {
     return (
         <div class={classes.root} >
 
-            <span class={classes.categoryTitle}> {type} </span>
-            <Checkbox onChange={handleChange} checked={checked} ></Checkbox>
+            <span style={{display: 'flex', alignItems: 'center'}}>
+                <span class={classes.categoryTitle}> {type} </span>
+                <Checkbox onChange={handleChange} checked={checked} color='primary' ></Checkbox>
+            </span>
 
             <span class={classes.itemsList}>
                 {items.map((item) => {
@@ -58,12 +70,12 @@ const FavoritesList = (props) => {
                         <span onClick={() => { item.used = !item.used }}>
 
                             { item.used && <div class={classes.item}>
-                                <img src={item.imageurl} alt=''></img>
+                                <img class={classes.star} src={litStar} alt=''></img>
                                 <span> {item.name + ' - ' + item.artist} </span>
                             </div> }
 
-                            { !item.used && <div class={classes.item} style={{ alpha: .2 }}>
-                                <img src={item.imageurl} alt=''></img>
+                            { !item.used && <div class={classes.item} style={{ alpha: .6 }}>
+                                <img class={classes.star} src={dullStar} alt=''></img>
                                 <span> {item.name + ' - ' + item.artist} </span>
                             </div> }
                             
