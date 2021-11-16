@@ -1,14 +1,14 @@
-// // npm packages
-// require('dotenv').config()
-// const express = require('express')
-// const cors = require('cors')
+// npm packages
+require('dotenv').config()
+const express = require('express')
+const cors = require('cors')
 
-// const app = express()
-// const port = process.env.DATABASE_PORT || 4005
+const app = express()
+const port = process.env.DATABASE_PORT || 4007
 
-// app.use(express.urlencoded({ extended: true }))
-// app.use(cors())
-// app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
+app.use(cors())
+app.use(express.json())
 
 // data: {
 //   imageURL: imageURL,
@@ -23,7 +23,7 @@
 const testItem = {
   id: 13451623,
   name: "Sam", 
-  //imageURL: "fake.com", 
+  imageURL: "fake.com", 
   description: "A cool, smart, funny, genius, wow, lots of jokes for every occasion and a smile and a frown.",
   creator: 12312973,
   yearCreated: 1998,
@@ -71,6 +71,59 @@ connection.connect((err) => {
 
 });
 
+app.post('/api/items_db/new_item', async (req, res) => {
+  let imageURL = req.body.imageURL;
+  let name = req.body.name;
+  let description = req.body.description;
+  let creator = req.body.creator;
+  let yearCreated = req.body.yearCreated;
+  let newItem = {
+    id: Math.random() * 1000000000,
+    imageURL: imageURL,
+    name: name, 
+    description: description, 
+    creator: creator,
+    yearCreated: yearCreated,
+    comments: [],
+    tags: []
+  };
+  connection.query('INSERT INTO items SET ?', newItem, (err, res) => {
+    if (err) throw err;
+    console.log('Last insert ID: ', res.insertId);
+  });
+})
+
+app.post('/api/items_db/:item_id/add_comment', async (req, res) => {
+  let text = req.body.text;
+  let comment = `'{ "text": ${text}}'`;
+  connection.query("UPDATE items SET comments = JSON_ARRAY_APPEND(comments , '$', ?) WHERE ID = ?",
+                  [comment, req.params.item_id],
+    (err, result) => {
+      if (err) throw err;
+    }
+  )
+  
+})
+
+app.post('/api/items_db/:item_id/add_tag', async (req, res) => {
+  let text = req.body.tag;
+  let tag = `'{ "text": ${text}}'`;
+  connection.query("UPDATE items SET comments = JSON_ARRAY_APPEND(comments , '$', ?) WHERE ID = ?",
+                  [comment, req.params.item_id],
+    (err, result) => {
+      if (err) throw err;
+    }
+  )
+  
+  
+  connection.query("UPDATE items SET tags = JSON_ARRAY_APPEND(tags , '$', ?) WHERE ID = ?",
+                   [testTag, testItem.id],
+    (err, result) => {
+    if (err) throw err;
+      
+    }
+  )
+})
 
 
 
