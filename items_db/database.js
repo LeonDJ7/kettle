@@ -106,18 +106,11 @@ app.post('/api/items_db/:item_id/add_comment', async (req, res) => {
 })
 
 app.post('/api/items_db/:item_id/add_tag', async (req, res) => {
-  let text = req.body.tag;
-  let tag = `'{ "text": ${text}}'`;
-  connection.query("UPDATE items SET comments = JSON_ARRAY_APPEND(comments , '$', ?) WHERE ID = ?",
-                  [comment, req.params.item_id],
-    (err, result) => {
-      if (err) throw err;
-    }
-  )
-  
+  let tag = req.body.tag;
+  let tagJSON = `'{ "tag": ${tag}}'`;
   
   connection.query("UPDATE items SET tags = JSON_ARRAY_APPEND(tags , '$', ?) WHERE ID = ?",
-                   [testTag, testItem.id],
+                   [tagJSON, req.params.item_id],
     (err, result) => {
     if (err) throw err;
       

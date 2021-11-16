@@ -184,7 +184,7 @@ app.post('/api/items/new_item', (req, res) => {
 
 // this one sends the tag to moderation and then to the database.
 app.post('/api/items/:item_id/add_tag', async (req, res) => {
-    let userID = req.body.userID;
+    // let userID = req.body.userID;
     let tag = req.body.tag;
     let itemID = req.params.item_id;
     if (userID === undefined || tag === undefined) {
