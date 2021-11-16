@@ -12,6 +12,9 @@ app.use(cors())
 app.use(express.json())
 
 
+//database: passw
+
+
 //the purpose of this microservice is to monitor:
 //  description - for unrelated, false info NOT DOING THIS YET
 //  tags - inappropriate, hateful descriptors
