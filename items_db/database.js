@@ -4,7 +4,7 @@ const express = require('express')
 const cors = require('cors')
 
 const app = express()
-const port = process.env.DATABASE_PORT || 4007
+const port = 4007
 
 app.use(express.urlencoded({ extended: true }))
 app.use(cors())
@@ -71,6 +71,17 @@ connection.connect((err) => {
 
 });
 
+app.get('/api/items_db/:item_id/get_item', async (req, res) => {
+  connection.query('SELECT * FROM items WHERE id = ? ', req.params.item_id,
+    (err, result) => {
+      if (err) {
+        res.status(404).end();
+      }
+      res.status(200).send(result)
+    }
+  )
+})
+
 app.post('/api/items_db/new_item', async (req, res) => {
   let imageURL = req.body.imageURL;
   let name = req.body.name;
@@ -78,18 +89,22 @@ app.post('/api/items_db/new_item', async (req, res) => {
   let creator = req.body.creator;
   let yearCreated = req.body.yearCreated;
   let newItem = {
-    id: Math.random() * 1000000000,
+    id: Math.floor(Math.random() * 1000000000),
     imageURL: imageURL,
     name: name, 
     description: description, 
     creator: creator,
     yearCreated: yearCreated,
-    comments: [],
-    tags: []
+    comments: '[]',
+    tags: '[]'
   };
-  connection.query('INSERT INTO items SET ?', newItem, (err, res) => {
-    if (err) throw err;
-    console.log('Last insert ID: ', res.insertId);
+  connection.query('INSERT INTO items SET ?', newItem, (err, result) => {
+    if (err) {
+      console.log("Something went wrong. This item couldn't be inserted into the db")
+      res.status(400).end()
+    }
+    console.log('Last insert ID: ', res.insertId)
+    res.end()
   });
 })
 
@@ -99,7 +114,11 @@ app.post('/api/items_db/:item_id/add_comment', async (req, res) => {
   connection.query("UPDATE items SET comments = JSON_ARRAY_APPEND(comments , '$', ?) WHERE ID = ?",
                   [comment, req.params.item_id],
     (err, result) => {
-      if (err) throw err;
+      if (err) {
+        res.status(400).end()
+      } else {
+        res.status(201).end()
+      }
     }
   )
   
@@ -112,44 +131,15 @@ app.post('/api/items_db/:item_id/add_tag', async (req, res) => {
   connection.query("UPDATE items SET tags = JSON_ARRAY_APPEND(tags , '$', ?) WHERE ID = ?",
                    [tagJSON, req.params.item_id],
     (err, result) => {
-    if (err) throw err;
-      
+      if (err) {
+        res.status(400).end()
+      } else {
+        res.status(201).end()
+      }
     }
   )
 })
 
-
-
-
-// app.post('/api/events', (req, res) => {
-
-//     // push stuff to database depending on type
-
-//     try {
-
-//         console.log('event: ', req.body);
-//         res.status(200).json(req.body);
-
-//     } catch (err) { res.status(500).send(err) }
-
-// })
-
-// WE NEED EACH MICROSERVICE TO HAVE ITS OWN DB THINGY
-
-// app.post('/api/new_item_to_db', (req, res) => {
-//     // post item to db
-// })
-
-// app.get('api/get_item', (req, res) => {
-
-// })
-
-// // app.post('/api/tag_to_db', (req, res) => {
-// //     // post item to db
-// // })
-
-// app.post()
-
-// app.listen(port, () => {
-//     console.log(`server listening on the port::${port}`)
-// })
+app.listen(port, () => {
+    console.log(`server listening on the port::${port}`)
+})

@@ -216,7 +216,7 @@ app.post('/api/items/:item_id/add_comment', async (req, res) => {
             data: {
                 text: text,
                 // itemID: itemID,
-                // userID: userID
+                userID: userID
             }
         });
 
