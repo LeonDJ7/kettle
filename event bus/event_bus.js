@@ -37,7 +37,8 @@ let ports = {
     items: '4002',
     users: '4003',
     moderation: '4004',
-    database: '4005'
+    database: '4005',
+    items_db: '4007'
 }
 
 app.post("api/events", (req, res) => {
