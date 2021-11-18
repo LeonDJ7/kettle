@@ -257,7 +257,7 @@ app.post("/api/events", (req, res) => {
 // process while running it on windows, which was
 // working fine on ubuntu for me but not on windows
 if (process.platform === "win32") {
-    var rl = require("readline").createInterface({
+    let rl = require("readline").createInterface({
       input: process.stdin,
       output: process.stdout
     })

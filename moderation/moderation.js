@@ -69,20 +69,20 @@ app.post('/api/events', (req, res) => {
         let type = body.type;
         let data = body.data;
 
-        if (type === 'comment_add') {
+        if (type === 'comment_moderate') {
 
             // moderate make sure comment is chill
 
             // if chill
             const response = await axios.post('http://localhost:4006/events', {
-                type: 'database_add',
+                type: 'comment_add',
                 data: {
-                    type: 'comment_add',
                     data: data
                 }
             });
             let data = await response.json()
         }
+        // else if (type === 'tag_moderate')
     } catch (err) { res.status(500).send(err) }
 })
 
