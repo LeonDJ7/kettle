@@ -3,7 +3,7 @@ require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
 const path = require('path')
-const axios = require('axios');
+const axios = require('axios')
 
 const app = express()
 const port = process.env.ITEMS_PORT || 4002
@@ -41,7 +41,7 @@ let postBody = {
         ]
       }
     ]
-  };
+  }
 
 let secondPost = {
     "port": 5555,
@@ -72,17 +72,17 @@ let secondPost = {
         ]
       }
     ]
-  };
+  }
   // make the imposters, I know its messy but I want it all here. 
 axios.post('http://localhost:2525/imposters', postBody)
   .catch(function (error) {
-    console.log(error);
-  });
+    console.log(error)
+  })
 
 axios.post('http://localhost:2525/imposters', secondPost)
   .catch(function (error) {
-    console.log(error);
-  });
+    console.log(error)
+  })
 
 // example item structures.
 const items = {
@@ -140,28 +140,28 @@ const items = {
 }
 
 app.get('/api/items/get_item', (req, res) => {
-    let itemID = String(req.query.item_id);
-    const response = await axios.get('http://localhost:4006/events', {
-      params: {
-        type: 'item_get',
+    let itemID = String(req.query.item_id)
+    const response = await axios.post('http://localhost:4006/events', {
+      type: 'item_get',
+      data: {
         itemID: itemID
       }
     })
     .then(function (response) {
-      res.status(200).send(await response.json());
+      res.status(200).send(await response.json())
     })
 })
 // this one sends the item to the database automatically.
 app.post('/api/items/new_item', (req, res) => {
-    let imageURL = req.body.imageURL;
-    let name = req.body.name;
-    let description = req.body.description;
-    let creator = req.body.creator;
-    let yearCreated = req.body.yearCreated;
+    let imageURL = req.body.imageURL
+    let name = req.body.name
+    let description = req.body.description
+    let creator = req.body.creator
+    let yearCreated = req.body.yearCreated
     if (imageURL === undefined || name === undefined || description === undefined 
         || creator === undefined || yearCreated === undefined
       ) { 
-        res.status(400).end();
+        res.status(400).end()
     } else {
       const response = await axios.post('http://localhost:4006/events', {
         type: 'item_add',
@@ -174,21 +174,21 @@ app.post('/api/items/new_item', (req, res) => {
           comments: [],
           tags: []
         }
-      });
+      })
       // make a post to the items_db thing 
       // this should be sent to the database
-      res.status(201).end();
-      //res.status(201).send(items[itemID]);
+      res.status(201).end()
+      //res.status(201).send(items[itemID])
     }
 })
 
 // this one sends the tag to moderation and then to the database.
 app.post('/api/items/:item_id/add_tag', async (req, res) => {
-    // let userID = req.body.userID;
-    let tag = req.body.tag;
-    let itemID = req.params.item_id;
+    // let userID = req.body.userID
+    let tag = req.body.tag
+    let itemID = req.params.item_id
     if (userID === undefined || tag === undefined) {
-      res.status(400).end();
+      res.status(400).end()
     } else {
         // the port has changed and this will be irrelevent
       const response = await axios.post('http://localhost:4006/events', {
@@ -197,7 +197,7 @@ app.post('/api/items/:item_id/add_tag', async (req, res) => {
             tag: tag,
             userID: userID,
         }
-      });
+      })
 
     let data = await response.json()
     res.send(data)
@@ -205,9 +205,9 @@ app.post('/api/items/:item_id/add_tag', async (req, res) => {
 })
 
 app.post('/api/items/:item_id/add_comment', async (req, res) => {
-    let userID = req.body.userID;
-    let text = req.body.text;
-    let itemID = String(req.params.item_id);
+    let userID = req.body.userID
+    let text = req.body.text
+    let itemID = String(req.params.item_id)
     if (userID === undefined || text === undefined) {
       res.status(400).end()
     } else {
@@ -218,7 +218,7 @@ app.post('/api/items/:item_id/add_comment', async (req, res) => {
                 // itemID: itemID,
                 userID: userID
             }
-        });
+        })
 
         let data = await response.json()
         // ok so if our data says we are good to go...
@@ -231,13 +231,37 @@ app.post('/api/items/:item_id/add_comment', async (req, res) => {
                 // itemID: itemID,
                 // userID: userID
             }
-          });
+          })
           // do something w/ the response.
-          res.status(200).end();
+          res.status(200).end()
         } else {
-          res.status(400).end();
+          res.status(400).end()
         }
     }
+})
+
+
+// comment_moderate : item service sends recieved comment to moderation
+// tag_moderate: item service sends recieved tag to moderation
+// tag_vote : items ms to users ms
+// comment_vote : items ms to users ms
+// comment_add : sending comment to item db
+// tag_add : sending tag to item db
+// item_add : sending item to item db
+
+app.post("/api/events", (req, res) => {
+  let type = req.body.type
+  if (type === 'tag_add') {
+    // add a tag
+  } else if (type === 'comment_add') {
+    // add a comment
+  } else if (type === 'item_add') {
+    // add an item
+  } else {
+    // do nothing
+    console.log("We don't care")
+  }
+  console.log("")
 })
 
 // !!!the below code is copied from stackoverflow!!!
@@ -248,19 +272,19 @@ if (process.platform === "win32") {
     var rl = require("readline").createInterface({
       input: process.stdin,
       output: process.stdout
-    });
+    })
   
     rl.on("SIGINT", function () {
-      process.emit("SIGINT");
-    });
+      process.emit("SIGINT")
+    })
   }
   
   process.on("SIGINT", async function () {
     // graceful shutdown
-    await axios.delete('http://localhost:2525/imposters/4545');
-    await axios.delete('http://localhost:2525/imposters/5555');
-    process.exit();
-  });
+    await axios.delete('http://localhost:2525/imposters/4545')
+    await axios.delete('http://localhost:2525/imposters/5555')
+    process.exit()
+  })
 
 app.listen(port, () => {
     console.log(`server listening on the port::${port}`)
