@@ -46,8 +46,10 @@ app.post("api/events", async (req, res) => {
     const { type, data } = req.body;
     const event = req.body;
 
-    // item_add, comment_moderate, tag_moderate, get_item <--- needs a response w/ JSON from
-    // the db
+    // for items:
+    // item_add, comment_moderate, tag_moderate, get_item 
+    // new_item, new_comment, new_tag
+
 
     if (type === 'get_item') {
         const response = await axios.post(`http://localhost:${ports.items_db}/api/events`, event).catch((er) => {
