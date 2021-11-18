@@ -1,8 +1,8 @@
 {
-  "name": "auth",
+  "name": "auth_db",
   "version": "1.0.0",
-  "description": "# Overview and Purpose This microservice handles the authorization of users in Kettle. It creates, logs in, and logs out users from the database.",
-  "main": "auth.js",
+  "description": "",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -14,6 +14,7 @@
     "dotenv": "^10.0.0",
     "email-format-check": "^1.1.3",
     "express": "^4.17.1",
+    "mysql": "^2.18.1",
     "path": "^0.12.7"
   }
 }

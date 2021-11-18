@@ -2,74 +2,95 @@
 require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
-const path = require('path')
+const axios = require('axios')
+const validEmail = require('email-format-check')
 
 const app = express()
 const port = process.env.AUTH_PORT || 4000
 
-
 app.use(cors())
 app.use(express.json())
 
-const users = {
-    "johndoe" : {password: "123456", sessionId: null},
-    "person" : {password: "abcde", sessionId: null}
-}
+axios.create({baseURL: `https://localhost:${port}`})
 
 app.post('/api/auth/sign_up', async (req, res) => {
-    const username = req.body.user
-    const password = req.body.password
+    const email = req.body.email
+    const pass = req.body.pass
 
-    if(username === undefined || password === undefined) res.status(400).end()
+    if(email === undefined || pass === undefined) res.status(400).end()
+    else if(!validEmail(email)) res.status(400).send({message: 'invalid-email'})
+    else if(pass === '') res.status(400).send({message: 'invalid-password'})
+    else {
+        //send to database microservice
+        try {
+            const response = await axios.post('http://localhost:4008/api/auth/sign_up', {
+                email: email,
+                pass: pass
+            })
 
-    if(users.hasOwnProperty(username)){
-        res.status(403).send({message: 'user-already-exists'})
-    }
-
-    //skeleton for future async functionality 
-    try {
-        users[username] = {
-            password, 
-            sessionId: null
+            res.status(response.status).send(response.data)
         }
-        res.status(201).send({message: 'user-created'})
-    }
-    catch(err) {
-        res.status(500).send({message: 'error-processing-request'})
+        catch (error) {
+            if(error.response) res.status(error.response.status).send(error.response.data)
+            else res.status(500).send({message: 'error-processing-request'})
+        }
     }
 })
 
-app.get('/api/auth/log_in', (req, res) => {
-    const username = req.query.user
-    const password = req.query.password
 
-    if(username === undefined || password === undefined) res.status(400).end()
+app.get('/api/auth/log_in', async (req, res) => {
+    const email = req.query.email
+    const pass = req.query.pass
 
-    if(!users.hasOwnProperty(username)) {
-        res.status(404).send({message: 'user-not-found'})
-    }
-    else if(password === users[username].password) {
-        users[username].sessionId = Math.random()
-        res.status(200).send({message: 'login-successful'})
-    }
+    if(email === undefined || pass === undefined) res.status(400).end()
     else {
-        res.status(403).send({message: 'incorrect-password'})
+        //send to database microservice
+        try {
+            const response = await axios.get(`http://localhost:4008/api/auth/log_in?email=${email}&pass=${pass}`)
+
+            res.status(response.status).send(response.data)
+        }
+        catch (error) {
+            if(error.response) res.status(error.response.status).send(error.response.data)
+            else res.status(500).send({message: 'error-processing-request'})
+        }
+
     }
 })
 
-app.get('/api/auth/log_out', (req, res) => {
-    const username = req.query.user
+//event bus
+app.post('/api/events', async (req, res) => {
+    const type = req.body.type
+    const data = req.body.data
 
-    if(username === undefined) res.status(400).end()
+    if(type === "user_signup") {
+        try {
+            const response = await axios.post(`http://localhost:${port}/api/auth/sign_up`, {
+                email: data.email,
+                pass: data.pass
+            })
 
-    if(!users.hasOwnProperty(username)) {
-        res.status(404).send({message: 'user-not-found'})
+            res.status(response.status).send(response.data)
+        }
+        catch (error) {
+            if(error.response) res.status(error.response.status).send(error.response.data)
+            else res.status(500).send({message: 'error-processing-request'})
+        }
     }
-    else {
-        users[username].sessionId = null
-        res.status(200).send({message: 'logged-out'})
+    else if(type == "user_login") {
+        try {
+            const response = await axios.get(`http://localhost:${port}/api/auth/log_in?email=${data.email}&pass=${data.pass}`)
+
+            res.status(response.status).send(response.data)
+        }
+        catch (error) {
+            if(error.response) res.status(error.response.status).send(error.response.data)
+            else res.status(500).send({message: 'error-processing-request'})
+        }
     }
+    else res.end()
 })
+
 
 app.listen(port, () => {
     console.log(`server listening on the port::${port}`)
