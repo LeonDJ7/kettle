@@ -16,5 +16,10 @@
     "url": "https://github.com/LeonDJ7/kettle/issues"
   },
   "homepage": "https://github.com/LeonDJ7/kettle#readme",
-  "dependencies": {}
+  "dependencies": {
+    "mysql": "^2.18.1"
+  },
+  "main": "index.js",
+  "devDependencies": {},
+  "keywords": []
 }
