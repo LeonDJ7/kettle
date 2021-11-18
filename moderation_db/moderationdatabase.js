@@ -36,3 +36,16 @@ connection.connect((err) => {
 })
 
 
+//get TAG or COMMENT data from event bus and store bad tags/comments to graveyard 
+app.post("/api/events"), (req, res) => {
+  const { type, data } = req.body
+  if (type === 'comment_moderate'){
+    
+  }
+  else if (type === 'tag_moderate'){
+
+  }
+}
+
+
+
