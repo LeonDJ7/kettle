@@ -8,29 +8,10 @@ const validEmail = require('email-format-check')
 const app = express()
 const port = process.env.AUTH_PORT || 4000
 
-
 app.use(cors())
 app.use(express.json())
 
-const mysql = require('mysql')
-const e = require('express')
-const connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: 'galactic',
-  database: 'auth'
-})
-
 axios.create({baseURL: `https://localhost:${port}`})
-
-connection.connect((err) => {
-    if(err){
-      console.log('Error connecting to DB')
-      return
-    }
-    console.log('DB Connection established')
-})
-
 
 app.post('/api/auth/sign_up', async (req, res) => {
     const email = req.body.email
@@ -77,22 +58,7 @@ app.get('/api/auth/log_in', async (req, res) => {
     }
 })
 
-
-app.get('/api/auth/log_out', (req, res) => {
-    const email = req.query.user
-
-    if(email === undefined) res.status(400).end()
-
-    if(!users.hasOwnProperty(email)) {
-        res.status(404).send({message: 'user-not-found'})
-    }
-    else {
-        users[email].sessionId = null
-        res.status(200).send({message: 'logged-out'})
-    }
-})
-
-//?????
+//event bus
 app.post('/api/events', async (req, res) => {
     const type = req.body.type
     const data = req.body.data
@@ -113,7 +79,7 @@ app.post('/api/events', async (req, res) => {
     }
     else if(type == "user_login") {
         try {
-            const response = await axios.get(`http://localhost:${port}/api/auth/log_in?email=${email}&pass=${pass}`)
+            const response = await axios.get(`http://localhost:${port}/api/auth/log_in?email=${data.email}&pass=${data.pass}`)
 
             res.status(response.status).send(response.data)
         }
@@ -122,20 +88,10 @@ app.post('/api/events', async (req, res) => {
             else res.status(500).send({message: 'error-processing-request'})
         }
     }
-    else {
-        res.status(400).send({message: "bad-format"})
-    }
+    else res.end()
 })
 
 
 app.listen(port, () => {
     console.log(`server listening on the port::${port}`)
 })
-
-//gives me an err
-/* 
-connection.end((err) => {
-    // The connection is terminated gracefully
-    // Ensures all remaining queries are executed
-    // Then sends a quit packet to the MySQL server.
-})*/
