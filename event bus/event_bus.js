@@ -41,7 +41,7 @@ let ports = {
     items_db: '4007'
 }
 
-app.post("api/events", async (req, res) => {
+app.post("/api/events", async (req, res) => {
     
     const { type, data } = req.body;
     const event = req.body;
@@ -57,11 +57,29 @@ app.post("api/events", async (req, res) => {
         });
         res.status(201).send(await response.json());
     
-    } else {
+    } else if(type === "user_signup") {
+        try {
+            const response = await axios.post(`http://localhost:${ports.auth}/api/events`, event)
 
-        axios.post(`http://localhost:${ports.auth}/api/events`, event).catch((err) => {
-            console.log(err.message);
-        });
+            res.status(response.status).send(response.data)
+        }
+        catch (error) {
+            if(error.response) res.status(error.response.status).send(error.response.data)
+            else res.status(500).send({message: 'error-processing-request'})
+        }
+    }
+    else if(type === "user_login") {
+        const data = req.body.data
+        try {
+            const response = await axios.get(`http://localhost:${ports.auth}/api/auth/log_in?email=${data.email}&pass=${data.pass}`)
+            res.status(response.status).send(response.data)
+        }
+        catch (error) {
+            if(error.response) res.status(error.response.status).send(error.response.data)
+            else res.status(500).send({message: 'error-processing-request'})
+        }
+    }
+    else {
 
         axios.post(`http://localhost:${ports.items_db}/api/events`, event).catch((er) => {
             console.log(err.message);
