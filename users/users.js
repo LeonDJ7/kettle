@@ -31,11 +31,11 @@ app.get('/api/users/favorites', (req, res) => {
     //     res.status(404).end();
     // }
     let favorites = String(req.query.favorites);
-    const response = await axios.get('http://localhost:4003/events', {
-      params: {
+    const response = await axios.post('http://localhost:4003/events', {
         type: 'favorite_get',
-        favorite: favorite
-      }
+        data: {
+            favorites: favorites
+        }
     })
     .then(function (response) {
         res.status(200).send(await response.json());
@@ -64,7 +64,8 @@ app.post('/api/users/favorite_item', (req, res) => {
         const response = await axios.post('http://localhost:4003/events', {
         type: 'favorite_add',
         data: {
-          
+          username: username,
+          itemID: itemID,
         }
       });
     }
