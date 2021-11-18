@@ -16,3 +16,10 @@ const connection = mysql.createConnection({
   password: 'wail066CAKE',
   database: 'usersdb'
 });
+
+// app.post("/api/events", (req, res) => {
+//     const { type, data } = req.body;
+//     if (type === "favorite_get") {
+
+//     }
+// }
