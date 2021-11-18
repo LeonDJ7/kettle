@@ -2,7 +2,6 @@
   "name": "kettle",
   "version": "0.1.0",
   "description": "",
-  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
@@ -17,10 +16,5 @@
     "url": "https://github.com/LeonDJ7/kettle/issues"
   },
   "homepage": "https://github.com/LeonDJ7/kettle#readme",
-  "dependencies": {
-    "cors": "^2.8.5",
-    "dotenv": "^10.0.0",
-    "express": "^4.17.1",
-    "path": "^0.12.7"
-  }
+  "dependencies": {}
 }
