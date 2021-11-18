@@ -164,7 +164,7 @@ app.post('/api/items/new_item', (req, res) => {
         res.status(400).end()
     } else {
       const response = await axios.post('http://localhost:4006/events', {
-        type: 'item_add',
+        type: 'new_item',
         data: {
           imageURL: imageURL,
           name: name, 
@@ -192,7 +192,7 @@ app.post('/api/items/:item_id/add_tag', async (req, res) => {
     } else {
         // the port has changed and this will be irrelevent
       const response = await axios.post('http://localhost:4006/events', {
-        type: 'tag_add',
+        type: 'tag_moderate',
         data: {
             tag: tag,
             userID: userID,
@@ -220,23 +220,7 @@ app.post('/api/items/:item_id/add_comment', async (req, res) => {
             }
         })
 
-        let data = await response.json()
-        // ok so if our data says we are good to go...
-        if (data.passed_moderation === "OK") {
-          // make our post
-          const response = await axios.post('http://localhost:4006/events', {
-            type: 'comment_add',
-            data: {
-                text: text,
-                // itemID: itemID,
-                // userID: userID
-            }
-          })
-          // do something w/ the response.
-          res.status(200).end()
-        } else {
-          res.status(400).end()
-        }
+        res.status(200).end()
     }
 })
 
@@ -252,11 +236,15 @@ app.post('/api/items/:item_id/add_comment', async (req, res) => {
 app.post("/api/events", (req, res) => {
   let type = req.body.type
   if (type === 'tag_add') {
-    // add a tag
+    const response = await axios.post('http://localhost:4006/events', {
+      type: 'new_tag',
+      data: req.body
+    })
   } else if (type === 'comment_add') {
-    // add a comment
-  } else if (type === 'item_add') {
-    // add an item
+    const response = await axios.post('http://localhost:4006/events', {
+      type: 'new_comment',
+      data: req.body
+    })
   } else {
     // do nothing
     console.log("We don't care")
