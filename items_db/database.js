@@ -70,74 +70,74 @@ connection.connect((err) => {
   // connection.query()
 })
 
-app.get('/api/items_db/:item_id/get_item', async (req, res) => {
-  connection.query('SELECT * FROM items WHERE id = ? ', req.params.item_id,
-    (err, result) => {
-      if (err) {
-        res.status(404).end()
-      }
-      res.status(200).send(result)
-    }
-  )
-})
+// app.get('/api/items_db/:item_id/get_item', async (req, res) => {
+//   connection.query('SELECT * FROM items WHERE id = ? ', req.params.item_id,
+//     (err, result) => {
+//       if (err) {
+//         res.status(404).end()
+//       }
+//       res.status(200).send(result)
+//     }
+//   )
+// })
 
-app.post('/api/items_db/new_item', async (req, res) => {
-  let imageURL = req.body.imageURL
-  let name = req.body.name
-  let description = req.body.description
-  let creator = req.body.creator
-  let yearCreated = req.body.yearCreated
-  let newItem = {
-    id: Math.floor(Math.random() * 1000000000),
-    imageURL: imageURL,
-    name: name, 
-    description: description, 
-    creator: creator,
-    yearCreated: yearCreated,
-    comments: '[]',
-    tags: '[]'
-  }
-  connection.query('INSERT INTO items SET ?', newItem, (err, result) => {
-    if (err) {
-      console.log("Something went wrong. This item couldn't be inserted into the db")
-      res.status(400).end()
-    }
-    console.log('Last insert ID: ', res.insertId)
-    res.end()
-  })
-})
+// app.post('/api/items_db/new_item', async (req, res) => {
+//   let imageURL = req.body.imageURL
+//   let name = req.body.name
+//   let description = req.body.description
+//   let creator = req.body.creator
+//   let yearCreated = req.body.yearCreated
+//   let newItem = {
+//     id: Math.floor(Math.random() * 1000000000),
+//     imageURL: imageURL,
+//     name: name, 
+//     description: description, 
+//     creator: creator,
+//     yearCreated: yearCreated,
+//     comments: '[]',
+//     tags: '[]'
+//   }
+//   connection.query('INSERT INTO items SET ?', newItem, (err, result) => {
+//     if (err) {
+//       console.log("Something went wrong. This item couldn't be inserted into the db")
+//       res.status(400).end()
+//     }
+//     console.log('Last insert ID: ', res.insertId)
+//     res.end()
+//   })
+// })
 
-app.post('/api/items_db/:item_id/add_comment', async (req, res) => {
-  let text = req.body.text
-  let comment = `'{ "text": ${text}}'`
-  connection.query("UPDATE items SET comments = JSON_ARRAY_APPEND(comments , '$', ?) WHERE ID = ?",
-                  [comment, req.params.item_id],
-    (err, result) => {
-      if (err) {
-        res.status(400).end()
-      } else {
-        res.status(201).end()
-      }
-    }
-  )
+// app.post('/api/items_db/:item_id/add_comment', async (req, res) => {
+//   let text = req.body.text
+//   let comment = `'{ "text": ${text}}'`
+//   connection.query("UPDATE items SET comments = JSON_ARRAY_APPEND(comments , '$', ?) WHERE ID = ?",
+//                   [comment, req.params.item_id],
+//     (err, result) => {
+//       if (err) {
+//         res.status(400).end()
+//       } else {
+//         res.status(201).end()
+//       }
+//     }
+//   )
   
-})
+// })
 
-app.post('/api/items_db/:item_id/add_tag', async (req, res) => {
-  let tag = req.body.tag
-  let tagJSON = `'{ "tag": ${tag}}'`
+// app.post('/api/items_db/:item_id/add_tag', async (req, res) => {
+//   let tag = req.body.tag
+//   let tagJSON = `'{ "tag": ${tag}}'`
   
-  connection.query("UPDATE items SET tags = JSON_ARRAY_APPEND(tags , '$', ?) WHERE ID = ?",
-                   [tagJSON, req.params.item_id],
-    (err, result) => {
-      if (err) {
-        res.status(400).end()
-      } else {
-        res.status(201).end()
-      }
-    }
-  )
-})
+//   connection.query("UPDATE items SET tags = JSON_ARRAY_APPEND(tags , '$', ?) WHERE ID = ?",
+//                    [tagJSON, req.params.item_id],
+//     (err, result) => {
+//       if (err) {
+//         res.status(400).end()
+//       } else {
+//         res.status(201).end()
+//       }
+//     }
+//   )
+// })
 
 app.post("/api/events", (req, res) => {
   const { type, data } = req.body
