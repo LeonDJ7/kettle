@@ -41,27 +41,44 @@ let ports = {
     items_db: '4007'
 }
 
-app.post("api/events", (req, res) => {
+app.post("api/events", async (req, res) => {
     
+    const { type, data } = req.body;
     const event = req.body;
 
-    axios.post(`http://localhost:${ports.auth}/api/events`, event).catch((err) => {
-        console.log(err.message);
-    });
+    // item_add, comment_moderate, tag_moderate, get_item <--- needs a response w/ JSON from
+    // the db
+
+    if (type === 'get_item') {
+        const response = await axios.post(`http://localhost:${ports.items_db}/api/events`, event).catch((er) => {
+            console.log(err.message);
+        });
+        res.status(201).send(await response.json());
     
-    axios.post(`http://localhost:${ports.discover}/api/events`, event).catch((err) => {
-        console.log(err.message);
-    });
-    axios.post(`http://localhost:${ports.items}/api/events`, event).catch((err) => {
-        console.log(err.message);
-    });
-    axios.post(`http://localhost:${posts.users}/api/events`, event).catch((err) => {
-        console.log(err.message);
-    });
-    axios.post(`http://localhost:${posts.moderation}/api/events`, event).catch((err) => {
-        console.log(err.message);
-    });
-    res.send({ status: "OK" });
+    } else {
+
+        axios.post(`http://localhost:${ports.auth}/api/events`, event).catch((err) => {
+            console.log(err.message);
+        });
+
+        axios.post(`http://localhost:${ports.items_db}/api/events`, event).catch((er) => {
+            console.log(err.message);
+        })
+        
+        axios.post(`http://localhost:${ports.discover}/api/events`, event).catch((err) => {
+            console.log(err.message);
+        });
+        axios.post(`http://localhost:${ports.items}/api/events`, event).catch((err) => {
+            console.log(err.message);
+        });
+        axios.post(`http://localhost:${posts.users}/api/events`, event).catch((err) => {
+            console.log(err.message);
+        });
+        axios.post(`http://localhost:${posts.moderation}/api/events`, event).catch((err) => {
+            console.log(err.message);
+        });
+        res.send({ status: "OK" });
+    }   
 });
 
 app.listen(port, () => {
