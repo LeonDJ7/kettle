@@ -50,24 +50,6 @@ const connection = mysql.createConnection({
 connection.connect((err) => {
   if (err) throw err
   console.log('Connected!')
-  // connection.query('INSERT INTO items SET ?', testItem, (err, res) => {
-  //   if (err) throw err
-  //   console.log('Last insert ID: ', res.insertId)
-  // })
-  // trying to append a tag.
-  // connection.query("UPDATE items SET tags = JSON_ARRAY_APPEND(tags , '$', ?) WHERE ID = ?",
-  //                 [testTag, testItem.id],
-  //                 (err, result) => {
-  //                   if (err) throw err
-  //                 }
-  // )
-  // connection.query("UPDATE items SET comments = JSON_ARRAY_APPEND(comments , '$', ?) WHERE ID = ?",
-  //                 [testComment, testItem.id],
-  //   (err, result) => {
-  //     if (err) throw err
-  //   }
-  // )
-  // connection.query()
 })
 
 // app.get('/api/items_db/:item_id/get_item', async (req, res) => {
@@ -141,6 +123,7 @@ connection.connect((err) => {
 
 app.post("/api/events", (req, res) => {
   const { type, data } = req.body
+  // get an item
   if (type === "new_item") {
     data[id] = Math.floor(Math.random() * 1000000000)
     connection.query('INSERT INTO items SET ?', newItem, (err, result) => {
