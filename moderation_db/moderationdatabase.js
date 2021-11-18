@@ -1,3 +1,14 @@
+//npm packages
+require('dotenv').config()
+const express = require('express')
+const cors = require('cors')
+
+const app = express()
+const port = 4007
+
+app.use(express.urlencoded({ extended: true }))
+app.use(cors())
+app.use(express.json())
 
 
 const mysql = require('mysql');
@@ -23,3 +34,5 @@ connection.connect((err) => {
       console.log("1 record inserted into commentgraveyard")
   })
 })
+
+
