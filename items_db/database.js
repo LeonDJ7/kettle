@@ -163,6 +163,16 @@ app.post("/api/events", (req, res) => {
         }
       }
     )
+  } else if (type === "get_item") {
+    let item_id = data.item_id
+    connection.query("SELECT * FROM items WHERE ID = ?", item_id,
+      (err, result) => {
+        if (err) {
+          res.status(404).end()
+        } else {
+          res.status(201).send(result)
+        }
+      })
   }
 })
 
