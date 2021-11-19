@@ -67,48 +67,6 @@ const items = {
     }
 }
 
-app.post('/api/discover/top_tags', (req, res) => {
-
-    try {
-
-        // recieve favorites (list of string ids)
-        let favorites = req.body.favorites
-        console.log(favorites)
-
-        let tags = {}
-
-        favorites.forEach((id) => {
-            items[id].tags.forEach((tag) => {
-                tags[tag.tag] = tags[tag.tag] ? tags[tag.tag] + tag.votes : tag.votes
-            })
-        })
-
-        // send request to get tags of favorite songs
-        /*
-        for (let i = 0; i < favorites.length; i++) {
-            axios.get(`api/items/get_item?item_id=${favorites[i]}`, {
-
-            })
-                .then((res) => res.json())
-                .then((data) => {
-                    data.tags.forEach((tag) => {
-                        tags[tag.tag] = tags[tag.tag] ? tags[tag.tag] + tag.votes : tag.votes
-                    })
-                })
-                .catch((e) => {
-                    console.log(error)
-                })
-        }
-        */
-
-        res.status(200).json(tags)
-
-    }  catch (err) { res.status(500).send(err) }
-    
-    
-
-})
-
 app.post('/api/discover/recommendations', (req, res) => {
     
     try {

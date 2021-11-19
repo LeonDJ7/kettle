@@ -68,9 +68,9 @@ app.post('/api/events', async (req, res) => {
         let body = req.body; //does this need to be here ??
         let type = body.type;
         let data = body.data;
-        console.log("HEOUAGSYDOUASGYDOUASGYDOAUSGDOUASGDYOASGYDUOASD")
+        // console.log("HEOUAGSYDOUASGYDOUASGYDOAUSGDOUASGDYOASGYDUOASD")
         if (type === 'comment_moderate') {
-            console.log("Henlo?")
+            console.log("Moderating a comment.")
             // moderate make sure comment is chill
             let comment = data.text
             let bad = false
@@ -91,19 +91,20 @@ app.post('/api/events', async (req, res) => {
         }
         else if (type === 'tag_moderate') {
             //moderate to make sure tag is chill
-            console.log("Here?")
+            // console.log("Here?")
+            console.log("Moderating tag...")
             let tag = data.tag
             let bad = false
             if(filter.clean(tag) !== tag) { bad = true }
             if(bad === false) {
-                console.log("Hekjwhgds")
+                // console.log("Hekjwhgds")
                 //tag is chill
                 
                 axios.post('http://localhost:4006/api/events', {
                     type: 'tag_add',
                     data: { tag: data.tag, itemID: itemID }
                 }) 
-                console.log("lajshdasd")
+                // console.log("lajshdasd")
                 // let data = await response.json()
             }
             else {

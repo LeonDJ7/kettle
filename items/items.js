@@ -4,6 +4,7 @@ const express = require('express')
 const cors = require('cors')
 const path = require('path')
 const axios = require('axios')
+const { type } = require('os')
 
 const app = express()
 const port = process.env.ITEMS_PORT || 4002
@@ -200,11 +201,15 @@ app.post('/api/items/:item_id/add_tag', async (req, res) => {
             itemID: itemID
         }
       })
-      console.log(await response)
+      //console.log(await response)
+      //console.log(await response.config.data)
+      const { type, data } = JSON.parse(await response.config.data)
+      console.log(type)
+      console.log(data) 
 
       axios.post('http://localhost:4006/api/events', {
         type: 'new_tag',
-        data: { tag: response.tag, itemID: response.itemID }
+        data: { tag: data.tag, itemID: data.itemID }
       })
 
     //let data = await response.json()
