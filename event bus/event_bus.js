@@ -68,58 +68,52 @@ app.post("/api/events", async (req, res) => {
 
         if (event.type === 'comment_moderate') {
             
-            const response = await axios.post(`http://localhost:${ports.items}/api/events`, event).catch((er) => {
+            axios.post(`http://localhost:${ports.items}/api/events`, event).catch((er) => {
                 console.log(err.message);
             });
-            res.status(201).json(await response.json());
 
         }
         
         if (event.type === 'tag_moderate') {
             
-            const response = await axios.post(`http://localhost:${ports.items}/api/events`, event).catch((er) => {
+            axios.post(`http://localhost:${ports.items}/api/events`, event).catch((er) => {
                 console.log(err.message);
             });
-            res.status(201).json(await response.json());
 
         }
 
         if (event.type === 'tag_vote') {
             
-            const response = await axios.post(`http://localhost:${ports.users}/api/events`, event).catch((er) => {
+            await axios.post(`http://localhost:${ports.users}/api/events`, event).catch((er) => {
                 console.log(err.message);
-            });
-            res.status(201).json(await response.json());
+            })
 
         }
 
         if (event.type === 'comment_vote') {
             
-            const response = await axios.post(`http://localhost:${ports.users}/api/events`, event).catch((er) => {
+            axios.post(`http://localhost:${ports.users}/api/events`, event).catch((er) => {
                 console.log(err.message);
             });
-            res.status(201).json(await response.json());
 
         }
 
         if (event.type === 'comment_add') {
             
-            const response = await axios.post(`http://localhost:${ports.items_db}/api/events`, event).catch((er) => {
+            axios.post(`http://localhost:${ports.items_db}/api/events`, event).catch((er) => {
                 console.log(err.message);
             });
-            res.status(201).json(await response.json());
 
         }
 
         if (event.type === 'tag_add') {
             
-            const response = await axios.post(`http://localhost:${ports.items_db}/api/events`, event).catch((er) => {
+            axios.post(`http://localhost:${ports.items_db}/api/events`, event).catch((er) => {
                 console.log(err.message);
             });
-            res.status(201).json(await response.json());
 
         }
-        
+
     }
     catch (err) {
         res.status(400).send(err)
