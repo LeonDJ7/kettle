@@ -81,7 +81,7 @@ app.post("/api/events", async (req, res) => {
     }
     else {
 
-        axios.post(`http://localhost:${ports.items_db}/api/events`, event).catch((er) => {
+        axios.post(`http://localhost:${ports.items_db}/api/events`, event).catch((err) => {
             console.log(err.message);
         })
         
@@ -91,10 +91,10 @@ app.post("/api/events", async (req, res) => {
         axios.post(`http://localhost:${ports.items}/api/events`, event).catch((err) => {
             console.log(err.message);
         });
-        axios.post(`http://localhost:${posts.users}/api/events`, event).catch((err) => {
+        axios.post(`http://localhost:${ports.users}/api/events`, event).catch((err) => {
             console.log(err.message);
         });
-        axios.post(`http://localhost:${posts.moderation}/api/events`, event).catch((err) => {
+        axios.post(`http://localhost:${ports.moderation}/api/events`, event).catch((err) => {
             console.log(err.message);
         });
         res.send({ status: "OK" });

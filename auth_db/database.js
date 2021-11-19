@@ -42,7 +42,7 @@ app.post('/api/auth/sign_up', async (req, res) => {
           const insertUser = `INSERT INTO users(id, email, pass) VALUES(NULL, '${email}', '${pass}')`
 
           connection.query(insertUser, (err, rows) => {
-              if(err) res.status(500).send({message: 'sql-error'})    
+              if(err) res.status(500).send({message: 'error-processing-request'})    
               else res.status(201).send({message: 'user-created'})
           })
       }
