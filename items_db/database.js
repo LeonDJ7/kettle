@@ -156,12 +156,12 @@ app.post("/api/events", (req, res) => {
       }
     )
   } else if (type === "new_tag") {
-    console.log("HI!")
+    console.log("Making a new tag")
     console.log(data)
     let tag = JSON.stringify(data.tag)
     let item_id = parseInt(data.itemID)
     // let tagJSON = `'{ "tag": ${tag}}'`
-    console.log(tag)
+    // console.log(tag)
     //console.log(data)
     // connection.query("SELECT * FROM items WHERE ID = ?", item_id, 
     //   (err, result) => {

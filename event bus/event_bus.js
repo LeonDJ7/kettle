@@ -42,7 +42,7 @@ let ports = {
 }
 
 app.post("/api/events", async (req, res) => {
-    console.log("Henlo!!!!")
+    console.log("New event...")
     const { type, data } = req.body;
     const event = req.body;
     console.log(type)
@@ -74,7 +74,7 @@ app.post("/api/events", async (req, res) => {
         const response = await axios.post(`http://localhost:${ports.moderation}/api/events`, event).catch((err) => {
             console.log("error here.");
         });
-        console.log(await response.json)
+        // console.log(await response.json)
         res.send(await response.json());
     //    console.log(err.message);
     }
