@@ -1,31 +1,12 @@
-# Authorization 
+# Authorization Database Persistence 
 ## author: Yasmeen Mekky
 
 # Overview and Purpose
-This microservice handles the authorization of users in Kettle. It creates, logs in, and logs out users from the database.
+This service persists the authorization of users in Kettle. It creates, logs in, and logs out users from the database.
 
-# Events received
-
-User sign up event:
-`{
-    "type": "user_signup",
-    "data": {"email" : email, "pass": password}
-}`
-
-User logs in event:
-`{
-    "type": "user_login",
-    "data": {"email" : email, "pass": password}
-}`
+It receives calls forwarded from the authorization microservice. 
 
 # API end-points
-
-## /api/events
-### Receieves events from the event bus and forwards it to the below end-points
-### parameters: event
-- POST method
-- If event type == "user_signup", /api/auth/sign_up is called.
-- If event type == "user_login", /api/auth/login is called.
 
 ## /api/auth/sign_up
 ### Registers a user in the database, given their username and password
