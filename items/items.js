@@ -76,12 +76,12 @@ let secondPost = {
   // make the imposters, I know its messy but I want it all here. 
 axios.post('http://localhost:2525/imposters', postBody)
   .catch(function (error) {
-    console.log(error)
+    //console.log(error)
   })
 
 axios.post('http://localhost:2525/imposters', secondPost)
   .catch(function (error) {
-    console.log(error)
+    //console.log(error)
   })
 
 // example item structures.
@@ -139,20 +139,21 @@ const items = {
     }
 }
 
-app.get('/api/items/get_item', (req, res) => {
-    let itemID = String(req.query.item_id)
-    const response = await axios.post('http://localhost:4006/events', {
-      type: 'item_get',
-      data: {
-        itemID: itemID
-      }
-    })
-    .then(function (response) {
-      res.status(200).send(await response.json())
-    })
-})
+// app.get('/api/items/get_item', async (req, res) => {
+//     let itemID = String(req.query.item_id)
+//     const response = await axios.post('http://localhost:4006/events', {
+//       type: 'item_get',
+//       data: {
+//         itemID: itemID
+//       }
+//     })
+//     .then(function (response) {
+//       res.status(200).send(await response.json())
+//     })
+// })
+
 // this one sends the item to the database automatically.
-app.post('/api/items/new_item', (req, res) => {
+app.post('/api/items/new_item', async (req, res) => {
     let imageURL = req.body.imageURL
     let name = req.body.name
     let description = req.body.description
@@ -184,23 +185,30 @@ app.post('/api/items/new_item', (req, res) => {
 
 // this one sends the tag to moderation and then to the database.
 app.post('/api/items/:item_id/add_tag', async (req, res) => {
-    // let userID = req.body.userID
+    let userID = req.body.userID
     let tag = req.body.tag
     let itemID = req.params.item_id
     if (userID === undefined || tag === undefined) {
       res.status(400).end()
     } else {
         // the port has changed and this will be irrelevent
-      const response = await axios.post('http://localhost:4006/events', {
+      const response = await axios.post('http://localhost:4006/api/events', {
         type: 'tag_moderate',
         data: {
             tag: tag,
             userID: userID,
+            itemID: itemID
         }
       })
+      console.log(await response)
 
-    let data = await response.json()
-    res.send(data)
+      axios.post('http://localhost:4006/api/events', {
+        type: 'new_tag',
+        data: { tag: response.tag, itemID: response.itemID }
+      })
+
+    //let data = await response.json()
+    res.end()
   }
 })
 
@@ -233,7 +241,7 @@ app.post('/api/items/:item_id/add_comment', async (req, res) => {
 // tag_add : sending tag to item db
 // item_add : sending item to item db
 
-app.post("/api/events", (req, res) => {
+app.post("/api/events", async (req, res) => {
   let type = req.body.type
   if (type === 'tag_add') {
     const response = await axios.post('http://localhost:4006/events', {
@@ -247,9 +255,8 @@ app.post("/api/events", (req, res) => {
     })
   } else {
     // do nothing
-    console.log("We don't care")
+    res.end()
   }
-  console.log("")
 })
 
 // !!!the below code is copied from stackoverflow!!!

@@ -36,12 +36,9 @@ let ports = {
 }
 
 app.post("/api/events", async (req, res) => {
-    
+
     try {
         const event = req.body;
-
-        // item_add, comment_moderate, tag_moderate, get_item <--- needs a response w/ JSON from
-        // the db
 
         if (event.type === 'get_item') {
 
@@ -73,12 +70,17 @@ app.post("/api/events", async (req, res) => {
             });
 
         }
-        
-        if (event.type === 'tag_moderate') {
-            
-            axios.post(`http://localhost:${ports.items}/api/events`, event).catch((er) => {
-                console.log(err.message);
-            });
+
+        if (event.type === "user_login") {
+
+            const data = req.body.data
+            try {
+                const response = await axios.get(`http://localhost:${ports.auth}/api/auth/log_in?email=${data.email}&pass=${data.pass}`)
+                res.status(response.status).send(response.data)
+            }
+            catch (err) {
+                res.status(400).send(err)
+            }
 
         }
 
@@ -90,34 +92,27 @@ app.post("/api/events", async (req, res) => {
 
         }
 
-        if (event.type === 'comment_vote') {
-            
-            axios.post(`http://localhost:${ports.users}/api/events`, event).catch((er) => {
-                console.log(err.message);
-            });
-
-        }
-
-        if (event.type === 'comment_add') {
-            
-            axios.post(`http://localhost:${ports.items_db}/api/events`, event).catch((er) => {
-                console.log(err.message);
-            });
-
-        }
-
-        if (event.type === 'tag_add') {
-            
-            axios.post(`http://localhost:${ports.items_db}/api/events`, event).catch((er) => {
-                console.log(err.message);
-            });
-
-        }
-
+        axios.post(`http://localhost:${ports.items_db}/api/events`, event).catch((err) => {
+            console.log(err.message);
+        })
+        
+        axios.post(`http://localhost:${ports.discover}/api/events`, event).catch((err) => {
+            console.log(err.message);
+        });
+        axios.post(`http://localhost:${ports.items}/api/events`, event).catch((err) => {
+            console.log(err.message);
+        });
+        axios.post(`http://localhost:${ports.users}/api/events`, event).catch((err) => {
+            console.log(err.message);
+        });
+        
+        res.send({ status: "OK" });
     }
     catch (err) {
         res.status(400).send(err)
     }
+
+    
     
 });
 

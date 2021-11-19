@@ -10,6 +10,9 @@ app.use(express.urlencoded({ extended: true }))
 app.use(cors())
 app.use(express.json())
 
+//console.log(JSON.stringify({tag: {tag: "great", userID: 0123176253 }, item_id: 56974605}))
+
+
 // data: {
 //   imageURL: imageURL,
 //   name: name, 
@@ -122,8 +125,12 @@ connection.connect((err) => {
 // })
 
 app.post("/api/events", (req, res) => {
-  const { type, data } = req.body
+  let { type, data } = req.body
+  console.log(data)
+  console.log(type)
+  // data = JSON.parse(data)
   // get an item
+  // console.log("Hey!")
   if (type === "new_item") {
     data[id] = Math.floor(Math.random() * 1000000000)
     connection.query('INSERT INTO items SET ?', newItem, (err, result) => {
@@ -149,12 +156,19 @@ app.post("/api/events", (req, res) => {
       }
     )
   } else if (type === "new_tag") {
-    let tag = data.tag
-    let item_id = data.item_id
-    let tagJSON = `'{ "tag": ${tag}}'`
-    
+    console.log("HI!")
+    console.log(data)
+    let tag = JSON.stringify(data.tag)
+    let item_id = parseInt(data.itemID)
+    // let tagJSON = `'{ "tag": ${tag}}'`
+    console.log(tag)
+    //console.log(data)
+    // connection.query("SELECT * FROM items WHERE ID = ?", item_id, 
+    //   (err, result) => {
+    //     console.log(result)
+    //   })
     connection.query("UPDATE items SET tags = JSON_ARRAY_APPEND(tags , '$', ?) WHERE ID = ?",
-                    [tagJSON, item_id],
+                    [tag, item_id],
       (err, result) => {
         if (err) {
           res.status(400).end()
@@ -164,7 +178,7 @@ app.post("/api/events", (req, res) => {
       }
     )
   } else if (type === "get_item") {
-    let item_id = data.item_id
+    let item_id = JSON.stringify(data.item_id)
     connection.query("SELECT * FROM items WHERE ID = ?", item_id,
       (err, result) => {
         if (err) {
@@ -173,6 +187,8 @@ app.post("/api/events", (req, res) => {
           res.status(201).send(result)
         }
       })
+  } else {
+    res.status(400).end()
   }
 })
 
