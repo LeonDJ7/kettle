@@ -42,9 +42,11 @@ let ports = {
 }
 
 app.post("/api/events", async (req, res) => {
-    
+    console.log("Henlo!!!!")
     const { type, data } = req.body;
     const event = req.body;
+    console.log(type)
+    console.log(data)
 
     // for items:
     // item_add, comment_moderate, tag_moderate, get_item 
@@ -68,6 +70,14 @@ app.post("/api/events", async (req, res) => {
             else res.status(500).send({message: 'error-processing-request'})
         }
     }
+    else if (type === "comment_moderate") {
+        const response = await axios.post(`http://localhost:${ports.moderation}/api/events`, event).catch((err) => {
+            console.log("error here.");
+        });
+        console.log(await response.json)
+        res.send(await response.json());
+    //    console.log(err.message);
+    }
     else if(type === "user_login") {
         const data = req.body.data
         try {
@@ -81,22 +91,21 @@ app.post("/api/events", async (req, res) => {
     }
     else {
 
-        axios.post(`http://localhost:${ports.items_db}/api/events`, event).catch((er) => {
-            console.log(err.message);
+        axios.post(`http://localhost:${ports.items_db}/api/events`, event).catch((err) => {
+        //    console.log(err.message);
         })
         
         axios.post(`http://localhost:${ports.discover}/api/events`, event).catch((err) => {
-            console.log(err.message);
+        //    console.log(err.message);
         });
         axios.post(`http://localhost:${ports.items}/api/events`, event).catch((err) => {
-            console.log(err.message);
+        //    console.log(err.message);
         });
-        axios.post(`http://localhost:${posts.users}/api/events`, event).catch((err) => {
-            console.log(err.message);
+        axios.post(`http://localhost:${ports.users}/api/events`, event).catch((err) => {
+        //    console.log(err.message);
         });
-        axios.post(`http://localhost:${posts.moderation}/api/events`, event).catch((err) => {
-            console.log(err.message);
-        });
+        //console.log("Henlo???!!!")
+        
         res.send({ status: "OK" });
     }   
 });

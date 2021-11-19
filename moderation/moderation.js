@@ -63,22 +63,24 @@ let Filter = require('bad-words'),
 
 
 
-app.post('/api/events', (req, res) => {
+app.post('/api/events', async (req, res) => {
     try {
         let body = req.body; //does this need to be here ??
         let type = body.type;
         let data = body.data;
-
+        console.log("HEOUAGSYDOUASGYDOUASGYDOAUSGDOUASGDYOASGYDUOASD")
         if (type === 'comment_moderate') {
+            console.log("Henlo?")
             // moderate make sure comment is chill
             let comment = data.text
             let bad = false
             if(filter.clean(comment) !== comment) { bad = true }
             if(bad === false) { 
                 //comment is chill
-                const response = await axios.post('http://localhost:4006/events', {
-                    type: 'commend_add',
-                    data: { data: data }
+                const response = await axios.post('http://localhost:4006/api/events', {
+                    type: 'comment_add',
+                    // we have to fix this
+                    data: { tag: data.tag, itemID: itemID }
                 })
                 let data = await response.json()
             }
@@ -89,23 +91,31 @@ app.post('/api/events', (req, res) => {
         }
         else if (type === 'tag_moderate') {
             //moderate to make sure tag is chill
+            console.log("Here?")
             let tag = data.tag
             let bad = false
             if(filter.clean(tag) !== tag) { bad = true }
             if(bad === false) {
+                console.log("Hekjwhgds")
                 //tag is chill
-                const response = await axios.post('http://localhost:4006/events', {
+                
+                axios.post('http://localhost:4006/api/events', {
                     type: 'tag_add',
-                    data: { data: data }
-                })
-                let data = await response.json()
+                    data: { tag: data.tag, itemID: itemID }
+                }) 
+                console.log("lajshdasd")
+                // let data = await response.json()
             }
             else {
                 //tag isn't chill
                 //send to taggraveyard 
             }
+            res.end()
         }
-    } catch (err) { res.status(500).send(err) }
+    } catch (err) { 
+        console.log("Error here....")
+        res.status(500).send(err) 
+    }
 })
 
 
