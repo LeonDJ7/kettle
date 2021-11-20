@@ -22,29 +22,32 @@ const connection = mysql.createConnection({
 connection.connect((err) => {
   if (err) throw err;
   console.log('Connected!')
-  var inserttag = "INSERT INTO taggraveyard (userid, tag) VALUES ('12345678', 'pussy')"
-  var insertcomment = "INSERT INTO commentgraveyard (userid, comment) VALUES ('12345678', 'this song fucking sucks')"
-  
-  connection.query(inserttag, function(err, result) {
-      if (err) throw err
-      console.log("1 record inserted into taggraveyard")
-  })
-  connection.query(insertcomment, function(err, result) {
-      if (err) throw err
-      console.log("1 record inserted into commentgraveyard")
-  })
 })
 
 
 //get TAG or COMMENT data from event bus and store bad tags/comments to graveyard 
 app.post("/api/events"), (req, res) => {
   const { type, data } = req.body
-  if (type === 'comment_moderate'){
-    
-  }
-  else if (type === 'tag_moderate'){
+  //there is no way this works
+  //how do insert records into tables using the itemsID and data.tag from the 
+  var inserttag = "INSERT INTO taggraveyard (userid, tag) VALUES (itemID, data.tag)"
+  var insertcomment = "INSERT INTO commentgraveyard (userid, comment) VALUES (itemID, data.tag)"
 
+
+  if (type === 'comment_graveyard'){
+    connection.query('INSERT INTO commentgraveyard (userid, tag) VALUES (?, ?)', itemID, data.tag, function(err, result) {
+      if (err) throw err
+      console.log("1 record inserted into the commentgraveyard")
+    })
   }
+
+  else if (type === 'tag_graveyard'){
+    connection.query(inserttag, function(err, result) {
+      if (err) throw err
+      console.log("1 record inserted into the taggraveyard")
+  })
+  }
+
 }
 
 
