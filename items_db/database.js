@@ -187,6 +187,18 @@ app.post("/api/events", (req, res) => {
           res.status(201).send(result)
         }
       })
+  } else if (type === 'top_tags') {
+
+    let favoriteids = data.favorites
+    connection.query("SELECT * FROM items WHERE ID in ?", favoriteids,
+      (err, result) => {
+        if (err) {
+          res.status(404).end()
+        } else {
+          res.status(201).send(result)
+        }
+      })
+
   } else {
     res.status(400).end()
   }
