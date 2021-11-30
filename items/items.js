@@ -259,7 +259,6 @@ app.post("/api/events", async (req, res) => {
       data: req.body
     })
   } else {
-    // do nothing
     res.end()
   }
 })
