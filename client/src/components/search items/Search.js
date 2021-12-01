@@ -42,7 +42,7 @@ const Search = (props) => {
         let id = selectedValue.id
         history.push({
             pathname: `/art/${id}`,
-            state: { item_info: dummyData.find((item) => item.id === id) }
+            state: { id: id }
         })
     }
 

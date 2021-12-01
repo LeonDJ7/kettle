@@ -10,6 +10,8 @@ import { Skeleton } from '@mui/material'
 import Tag from './Tag'
 import Comment from './Comment'
 import Links from './Links'
+import AddTagForm from './AddTagForm'
+import AddCommentForm from './AddCommentForm'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -96,9 +98,11 @@ const Item = (props) => {
     const classes = useStyles();
 
     const passedData = useLocation()
-    let itemInfo = passedData.state.item_info
+    const id = passedData.state.id
     
     const [loading, setLoading] = React.useState(true)
+    const [tagModalOpen, setTagModalOpen] = React.useState(false);
+    const [commentModalOpen, setCommentModalOpen] = React.useState(false);
     const [item, setItem] = React.useState({
         name: '',
         artist: '',
@@ -112,48 +116,11 @@ const Item = (props) => {
 
     React.useEffect(() => {
 
-        // retrieve from db with item_info.id
+        // retrieve from items service
 
-        setItem({
-            name: itemInfo.name,
-            artist: itemInfo.artist,
-            type: itemInfo.type,
-            id: itemInfo.id,
-            imageurl: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBwgHBgkIBwgKCgkLDRYPDQwMDRsUFRAWIB0iIiAdHx8kKDQsJCYxJx8fLT0tMTU3Ojo6Iys/RD84QzQ5OjcBCgoKDQwNGg8PGjclHyU3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N//AABEIAFAAUAMBIgACEQEDEQH/xAAbAAADAQADAQAAAAAAAAAAAAADBAUCAAEGB//EAC4QAAEEAgECBQMDBQEAAAAAAAEAAgMRBCExEkEFEyJRYRRxoSOBkTNCwdHwBv/EABgBAQEBAQEAAAAAAAAAAAAAAAIBAwAE/8QAGhEBAQEBAQEBAAAAAAAAAAAAAAERAiExEv/aAAwDAQACEQMRAD8AAIQHEEFZMGx2VRuP1vDQPUToI0Hh8mQySSNttjFuW9rzyJQh40b+V1I1jRYs/YhMZgc5/lxcXRI7ocuE+GYxSDYNorjEPkOOxRvunGtiAAQY8X+4HQ3tMRwD3/Ci4dgxWkAgaTkeI0jXCDgUwhh4Pv2ViKEUNKLhduK3stDFF8X91RjiBrSKIh2CmliXH/5+cZga2RgLHBxqx0i9Uf4/lVfEpcDGvHyMcv6gHlsYAv8AI3pJ+GNbL6p8l3WD6QTZ/PZOZb8TIjJm/rM2DGaL9cA/4R63fT55meJY8AxsrzJMaLJxX6LfMb6f2/7uiP8AAHZUbvq5iZmu9MtbLfZVsN8DYXTx5D5Wu24vkLun/SJ9RDIAOsbFj5R2l+YhT4McTJImta6g0A0p0sMbieiPy+NA3a9O+N7328NI46uNfZSsnFLHOcwh7fjkJc0euSEcIBFDfsquHZYG1wkw0irG1R8Mb6iCeR7JUcNRR2jsgOvTa3EzpKZY71DSBY8eYx0jaXyeryg3nfBR3EC+9dkGUsd0h5IHx7rUWsKNrmuc6y69NHf7p9peWgSxNpvBvYQ8DoP6dCzu08+GoyTVLO/TjQlJhYCOTS45rS0ARm+5XAf0mX3KaDCW7AUVPkjqqBTOM3Y9wu5mk+lEgZsaS0KcYONIsenBZYOEZg2irw5d6USFmK8H6lryBsFpqkl5mhRRo7cK7LahDmO1jZnPgsxdnF3HwqDZfRTuPlebka6CYSMOgrGHkNlbRO1n1DlPNLCBTr/dHE2kqAO4C7dKBoIGNI8E/KYxti1PiLnuKow6AVA43siNO0BhRQ7aivnlN4tMY54DdrGPjGuqXgdgn4+mNgPT03wAOE70k5DyY+iMl4G+yBjvohzTRTme0yQekdrUuEuaekjlHXYqsnkqrFe6Ix2rvanskAFAIrXucQGhQ1bFOr0m43qdES1lHlGZIPdcmKTZB7ojZNpBkiIH+xXOx//Z',
-            comments: [
-                { 
-                    text: 'hi this is a nostalgiac song',
-                    id: 1,
-                    likes: 4,
-                    liked: false
-                },
-                { 
-                    text: 'hi this is a goofy song',
-                    id: 2,
-                    likes: 7,
-                    liked: true
-                },
-            ],
-            tags: [
-                {
-                    tag: 'goofy',
-                    votes: 1,
-                    id: 1,
-                    voted: true
-                },
-                {
-                    tag: 'nostalgiac',
-                    votes: 4,
-                    id: 2,
-                    voted: false
-                }
-            ],
-            links: [
-                { website: 'apple', url: 'apple.com', imageurl: 'https://www.freepnglogos.com/uploads/mac-cosmetic-png-logo/infinite-island-apple-emblem-mac-cosmetic-png-logo-10.png' },
-                { website: 'spotify', url: 'spotify.com', imageurl: 'https://www.freepnglogos.com/uploads/spotify-logo-png/spotify-icon-marilyn-scott-0.png'}
-            ]
-        })
-
+        setLoading(true)
+        let itemInfo = loadItemData(id)
+        setItem(itemInfo)
         setLoading(false)
 
     }, [])
@@ -162,10 +129,20 @@ const Item = (props) => {
 
         // show add tag ui
 
-        setLoading(true)
-
-        setLoading(false)
+        if (window.localStorage.getItem('email')) {
+            setTagModalOpen(true)
+        }
     
+    }
+
+    const addComment = () => {
+
+        // show add comment ui
+
+        if (window.localStorage.getItem('email')) {
+            setCommentModalOpen(true)
+        }
+
     }
 
     return (
@@ -189,7 +166,7 @@ const Item = (props) => {
                             <span class={classes.tags}>
                                 { item.tags.sort((a,b) => (a.votes < b.votes) ? 1 : ((b.votes < a.votes) ? -1 : 0)).map((tag) => {
                                     return (
-                                        <Tag key={tag.id} id={tag.id} tag={tag.tag} votes={tag.votes} voted={tag.voted} />
+                                        <Tag key={tag.id} id={tag.id} tag={tag.tag} votes={tag.votes} />
                                     )
                                 })}
                                 <span class={classes.plus} onClick={addTag}> + </span>
@@ -198,9 +175,10 @@ const Item = (props) => {
                             <span class={classes.comments}>
                                 { item.comments.sort((a,b) => (a.likes < b.likes) ? 1 : ((b.likes < a.likes) ? -1 : 0)).map((comment) => {
                                     return (
-                                        <Comment key={comment.id} text={comment.text} id={comment.id} likes={comment.likes} liked={comment.liked} />
+                                        <Comment key={comment.id} text={comment.text} id={comment.id} likes={comment.likes} />
                                     )
                                 })}
+                                <span class={classes.plus} onClick={addComment}> + </span>
                             </span>
 
                         </span>
@@ -214,9 +192,32 @@ const Item = (props) => {
                 <Skeleton />
             }
 
+            <AddTagForm item={item} setModalOpen={setTagModalOpen} modalState={tagModalOpen} />
+            <AddCommentForm item={item} setModalOpen={setCommentModalOpen} modalState={commentModalOpen}/>
+
         </React.Fragment>
         
     )
 }
 
 export default Item
+
+const loadItemData = async (id) => {
+
+    let response = await fetch(`http://localhost:4002/api/items/get_item/${id}`)
+
+    if (!response.ok) return
+
+    let data = await response.json()
+
+    return {
+        name: data.name,
+        artist: data.creator,
+        type: data.type,
+        id: data.id,
+        imageurl: data.imageurl,
+        comments: data.comments,
+        tags: data.tags,
+        links: data.links
+    }
+}

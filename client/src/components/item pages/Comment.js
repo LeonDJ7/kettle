@@ -5,6 +5,8 @@ import arrowUpDark from '../../images/arrow_drop_up_light.png'
 import {
     makeStyles,createStyles
 } from '@material-ui/core'
+import AuthForm from '../user profile/AuthForm'
+import { Skeleton } from '@mui/material'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -34,37 +36,81 @@ const Comment = (props) => {
 
     const id = props.id
     const text = props.text
-    const [likes, setLikes] = React.useState(props.likes)
-    const [liked, setLiked] = React.useState(props.liked)
+    const [votes, setVotes] = React.useState(props.likes)
+    const [voted, setVoted] = React.useState(props.liked)
     const [loading, setLoading] = React.useState(false)
-    
-    const likeComment = () => {
-    
-        setLoading(true)
+    const [modalOpen, setModalOpen] = React.useState(false);
 
-        // send to db
+    const vote = async () => {
 
-        if (liked === true) {
-            setLiked(false)
-            setLikes(likes - 1)
+        let userId = window.localStorage.getItem('id')
+    
+        if (userId) {
+            
+            setLoading(true)
+
+            // send to db
+            
+            if (voted === true) {
+
+                let response = await fetch(`http://localhost:4006/api/comments/set_vote`, {
+                    method: 'POST',
+                    body: {
+                        tag_id: id,
+                        user_id: userId,
+                        voted: false
+                    }
+                })
+
+                if (response.ok) {
+                    setVoted(false)
+                    setVotes(votes - 1)
+                }
+
+            } else {
+
+                let response = await fetch(`http://localhost:4006/api/comments/set_vote`, {
+                    method: 'POST',
+                    body: {
+                        tag_id: id,
+                        user_id: userId,
+                        voted: true
+                    }
+                })
+
+                if (response.ok) {
+                    setVoted(true)
+                    setVotes(votes + 1)
+                }
+
+            }
+
+            setLoading(false)
+
         } else {
-            setLiked(true)
-            setLikes(likes + 1)
-        }
 
-        setLoading(false)
+            setModalOpen(true)
+
+        }
     
     }
 
     return (
-        <div class={classes.root} >
-            <span class={classes.commentText}> {text} </span>
-            <span class={classes.likes}>
-                {liked && <img src={arrowUpDark} style={{ cursor: 'pointer' }} alt='' onClick={likeComment} ></img>}
-                {!liked && <img src={arrowUpLight} style={{ cursor: 'pointer' }} alt='' onClick={likeComment} ></img>}
-                <span style={{ color: '#D15E5E', fontWeight: 800 }} > {likes} </span>
-            </span>
-        </div>
+        <React.Fragment>
+            
+            <div class={classes.root} >
+                <span class={classes.commentText}> {text} </span>
+                <span class={classes.likes}>
+                    {voted && <img src={arrowUpDark} style={{ cursor: 'pointer' }} alt='' onClick={vote} ></img>}
+                    {!voted && <img src={arrowUpLight} style={{ cursor: 'pointer' }} alt='' onClick={vote} ></img>}
+                    <span style={{ color: '#D15E5E', fontWeight: 800 }} > {votes} </span>
+                </span>
+            </div>
+            
+            <AuthForm setModalOpen={setModalOpen} modalState={modalOpen} ></AuthForm>
+
+        </React.Fragment>
+        
     )
 }
 

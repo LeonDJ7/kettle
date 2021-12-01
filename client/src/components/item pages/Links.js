@@ -35,7 +35,7 @@ const Links = (props) => {
         <div class={classes.root} >
             {links.map((link) => {
                 return (
-                    <img class={classes.linkImage} src={link.imageurl} onClick={() => {  window.open(link.url) }}></img>
+                    <img class={classes.linkImage} src={link.imageurl} alt='' onClick={() => {  window.open(link.url) }}></img>
                 )
             })}
         </div>

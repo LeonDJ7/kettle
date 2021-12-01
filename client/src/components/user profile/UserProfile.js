@@ -5,16 +5,18 @@ import {
 } from '@material-ui/core'
 
 import editProfileImg from '../../images/edit_profile.png'
+import dots from '../../images/dots.png'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
 
         root: {
-            padding: '6rem 3rem 6rem 3rem',
+            padding: '6rem 6rem 6rem 6rem',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'flex-start',
-            backgroundColor: '#4A4A4A'
+            backgroundColor: '#4A4A4A',
+            height: 'calc(100vh - 12rem - 78px)'
         },
 
         name: {
@@ -35,35 +37,37 @@ const useStyles = makeStyles((theme) =>
             flexWrap: 'wrap',
             justifyContent: 'flex-start',
             marginTop: '4rem',
+            gap: '4rem'
         },
 
         categoriesList: {
             width: '20rem',
-            justifyContent: 'flex-start'
         },
 
         dots: {
-            fontWeight: 800,
-            fontSize: '3rem',
+            width: '1.2rem',
         },
 
         favoritesList: {
+            marginTop: '1rem',
             display: 'flex',
             flexDirection: 'column',
-            alignItems: 'flex-start',
-            width: '100%'
+            width: '100%',
+            gap: '1rem',
         },
 
         favorite: {
             display: 'flex',
             flexDirection: 'row',
             width: '100%',
-            alignItems: 'center'
+            alignItems: 'center',
+            alignSelf: 'flex-start'
         },
 
         favoriteText: {
             flexGrow: 1,
-            fontWeight: 600
+            fontWeight: 600,
+            textAlign: 'left'
         },
 
         categoryTitle: {
@@ -80,6 +84,7 @@ const UserProfile = (props) => {
 
     const classes = useStyles();
     const [favorites, setFavorites] = React.useState({})
+    const email = window.localStorage.getItem('email')
     
     React.useEffect( () => {
 
@@ -107,33 +112,35 @@ const UserProfile = (props) => {
     }
 
     return (
-        <div class={classes.root} >
-            <span class={classes.name}> {user.name} </span>
-            <span class={classes.email}> {user.email} </span>
-            <span class={classes.categories}>
-                { Object.keys(favorites).map((category) => {
-                    return (
-                        <span class={classes.categoriesList}>
-                            <span class={classes.categoryTitle}> {category} </span>
-                            <span class={classes.favoritesList}>
-                                { favorites[category].map((item) => {
-                                    return (
-                                        <span class={classes.favorite}>
-                                            <span class={classes.favoriteText} style={{ color: `${random_color()}`}}> {item.name + ' - ' + item.artist} </span>
-                                            <span class={classes.dots}> ... </span>
-                                        </span>
-                                    )
-                                }) }
+        <React.Fragment>
+        
+            <div class={classes.root} >
+                <span class={classes.name}> {user.name} </span>
+                <span class={classes.email}> {user.email} </span>
+                <span class={classes.categories}>
+                    { Object.keys(favorites).map((category) => {
+                        return (
+                            <span class={classes.categoriesList}>
+                                <span class={classes.categoryTitle}> {category} </span>
+                                <span class={classes.favoritesList}>
+                                    { favorites[category].map((item) => {
+                                        return (
+                                            <span class={classes.favorite}>
+                                                <span class={classes.favoriteText} style={{ color: `${random_color()}`}}> {item.name + ' - ' + item.artist} </span>
+                                                <img src={dots} alt='' class={classes.dots}></img>
+                                            </span>
+                                        )
+                                    }) }
+                                </span>
                             </span>
-                        </span>
-                    )
-                    
-                }) }
-            </span>
-            
+                        )
+                        
+                    }) }
+                </span>
+                
+            </div>
 
-            
-        </div>
+        </React.Fragment>
     )
 }
 
