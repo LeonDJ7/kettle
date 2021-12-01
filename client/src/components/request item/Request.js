@@ -45,10 +45,10 @@ const Request = (props) => {
         <div class={classes.root} >
 
             <span class={classes.formControl}>
-                <TextField multiline fullWidth rows={1} label="what's it called" variant="filled" sx={{ background: 'rgba(255, 255, 255, .6)'}}>
+                <TextField multiline fullWidth rows={1} label="what's it called?" variant="filled" sx={{ background: 'rgba(255, 255, 255, .6)'}}>
                 </TextField>
                 
-                <TextField multiline fullWidth rows={12} label="anything else important?" variant="filled" sx={{ background: 'rgba(255, 255, 255, .6)'}}>
+                <TextField multiline fullWidth rows={12} label="anything else about it important to mention?" variant="filled" sx={{ background: 'rgba(255, 255, 255, .6)'}}>
                 </TextField>
 
                 <Button class={classes.requestButton} onClick={() => {

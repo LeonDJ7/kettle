@@ -39,20 +39,11 @@ const Search = (props) => {
     const history = useHistory();
     
     const handleChange = (selectedValue) => {
-
-        let id = ''
-
-        dummyData.every((item) => {
-
-            if (selectedValue === item.name + ' - ' + item.artist) { 
-                id = item.id
-                return false
-            }
-
-            return true
+        let id = selectedValue.id
+        history.push({
+            pathname: `/art/${id}`,
+            state: { id: id }
         })
-
-        history.push(`/${id}`)
     }
 
     return (
@@ -63,7 +54,7 @@ const Search = (props) => {
                 <Autocomplete
                     freeSolo
                     disableClearable
-                    options={dummyData.map((item) => item.name + ' - ' + item.artist)}
+                    options={dummyData.map((item) => { return { label: item.name + ' - ' + item.artist, id: item.id } })}
                     onChange={(event, selectedValue) => handleChange(selectedValue)}
                     renderInput={(params) => (
                         <TextField
@@ -94,16 +85,19 @@ const dummyData = [
     {
         id: 1,
         name: "harry potter: the first book",
-        artist: "JK Rowling"
+        artist: "JK Rowling",
+        type: 'book'
     },
     {
         id: 2,
         name: "harry potter: the second book",
-        artist: "JK Rowling"
+        artist: "JK Rowling",
+        type: 'book'
     },
     {
         id: 3,
         name: "harry potter: the third book",
-        artist: "JK Rowling"
+        artist: "JK Rowling",
+        type: 'book'
     }
 ]

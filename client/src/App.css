@@ -1,9 +1,10 @@
 .App {
   text-align: center;
+  min-width: '700px';
 }
 
 .header {
-    height: 100vh;
+    min-height: 100vh;
     background-color: #EACCCC;
 }
 

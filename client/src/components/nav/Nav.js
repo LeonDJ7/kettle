@@ -8,6 +8,7 @@ import {
     MenuItem,
     makeStyles,createStyles
 } from '@material-ui/core'
+import AuthForm from '../user profile/AuthForm'
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -91,6 +92,7 @@ const Nav = (props) => {
     const classes = useStyles();
 
     const [pathname, setPathname] = React.useState(window.location.pathname)
+    const [modalOpen, setModalOpen] = React.useState(false);
 
     const NavOptions = (props) => {
 
@@ -99,24 +101,41 @@ const Nav = (props) => {
 
                 <Link to="/" style={{ height: '100%'}}>
                     { pathname !== '/' && <button class={classes.optionsButton} id='1' onClick={() => {setPathname('/')}} type='text' size='large' >art</button> }
-                    { pathname === '/' && <button style={{ outline: '8px solid white' }} class={classes.optionsButton} id='1' onClick={() => {setPathname('/')}} type='text' size='large' >art</button> }
+                    { pathname === '/' && <button style={{ fontWeight: 1000 }} class={classes.optionsButton} id='1' onClick={() => {setPathname('/')}} type='text' size='large' >art</button> }
                 </Link>
 
-                <Link to="/discover" style={{ height: '100%'}}>
+                { window.localStorage.getItem('email') && 
+                    <Link to="/discover" style={{ height: '100%'}}>
                     
-                    { pathname !== '/discover' && <button class={classes.optionsButton} id='2' onClick={() => {setPathname('/discover')}} type='text' size='large' >discover</button> }
-                    { pathname === '/discover' && <button style={{ outline: '8px solid white' }} class={classes.optionsButton} id='2' onClick={() => {setPathname('/discover')}} type='text' size='large' >discover</button> }
+                        { pathname !== '/discover' && <button class={classes.optionsButton} id='2' onClick={() => {setPathname('/discover')}} type='text' size='large' >discover</button> }
+                        { pathname === '/discover' && <button style={{ fontWeight: 1000 }} class={classes.optionsButton} id='2' onClick={() => {setPathname('/discover')}} type='text' size='large' >discover</button> }
 
-                </Link>
+                    </Link>
+                }
 
-                <Link to="/user_profile" style={{ height: '100%'}}>
-                    { pathname !== '/user_profile' && <div class={classes.optionsButton} style={{display: 'flex', alignItems: 'center'}} id='3' onClick={() => {setPathname('/user_profile')}} >
+                { !window.localStorage.getItem('email') && 
+                    <span style={{ cursor: 'pointer', height: '100%' }} onClick={() => { setModalOpen(!modalOpen) }} >
+                        <button class={classes.optionsButton} id='2' type='text' size='large' >discover</button>
+                    </span>
+                }
+
+                { window.localStorage.getItem('email') && 
+                    <Link to={`/user_profile/${window.localStorage.getItem('id')}`} style={{ height: '100%'}}>
+                        { pathname !== '/user_profile' && <div class={classes.optionsButton} style={{display: 'flex', alignItems: 'center'}} id='3' onClick={() => {setPathname('/user_profile')}} >
+                            <img src={accountBox} alt='' style={{ width: '48px', height: '48px' }}></img>
+                        </div> }
+                        { pathname === '/user_profile' && <div style={{ display: 'flex', alignItems: 'center', outline: '8px solid white' }} class={classes.optionsButton} id='3' onClick={() => {setPathname('/user_profile')}}> 
+                            <img src={accountBox} alt='' style={{ width: '48px', height: '48px' }}></img>
+                        </div> }
+                    </Link>
+                }
+
+                { !window.localStorage.getItem('email') && 
+                    <span style={{ cursor: 'pointer' }} onClick={() => { setModalOpen(!modalOpen) }} >
                         <img src={accountBox} alt='' style={{ width: '48px', height: '48px' }}></img>
-                    </div> }
-                    { pathname === '/user_profile' && <div style={{ display: 'flex', alignItems: 'center', outline: '8px solid white' }} class={classes.optionsButton} id='3' onClick={() => {setPathname('/user_profile')}}> 
-                        <img src={accountBox} alt='' style={{ width: '48px', height: '48px' }}></img>
-                    </div> }
-                </Link>
+                    </span>
+                }
+                
                 
             </span>
         )
@@ -147,10 +166,10 @@ const Nav = (props) => {
                     open={open}
                     onClose={handleClose}
                     PaperProps={{
-                    style: {
-                        maxHeight: '4rem',
-                        width: '20ch',
-                    },
+                        style: {
+                            maxHeight: '4rem',
+                            width: '20ch',
+                        },
                     }}
                 >
 
@@ -162,9 +181,34 @@ const Nav = (props) => {
                         <Link to="/discover">discover</Link>
                     </MenuItem>
 
-                    <MenuItem class={classes.menuButton} {...props} onClick={() => {setPathname('/profile')}} key="3">
-                        <Link to="/profile">profile</Link>
-                    </MenuItem>
+                    { window.localStorage.getItem('email') && 
+
+                        <MenuItem class={classes.menuButton} {...props} onClick={() => {setPathname('/discover')}} key="2">
+                            <Link to="/discover">discover</Link>
+                        </MenuItem>
+                        
+                    }
+
+                    { !window.localStorage.getItem('email') &&
+                        <MenuItem class={classes.menuButton} {...props} onClick={() => {setPathname('/discover')}} key="2">
+                            <span style={{ cursor: 'pointer' }} onClick={() => { setModalOpen(!modalOpen) }} />
+                        </MenuItem>
+                    }
+
+                    { window.localStorage.getItem('email') && 
+
+                        <MenuItem class={classes.menuButton} {...props} onClick={() => {setPathname('/profile')}} key="3">
+                            <Link to={`/profile/${window.localStorage.getItem('id')}`} ></Link>
+                        </MenuItem>
+                        
+                    }
+
+                    { !window.localStorage.getItem('email') &&
+                        <MenuItem class={classes.menuButton} {...props} onClick={() => {setPathname('/profile')}} key="3">
+                            <span style={{ cursor: 'pointer' }} onClick={() => { setModalOpen(!modalOpen) }} />
+                        </MenuItem>
+                    }
+                    
 
                 </Menu>
 
@@ -186,6 +230,8 @@ const Nav = (props) => {
 
             <NavMenu/>
             <NavOptions/>
+
+            <AuthForm setModalOpen={setModalOpen} modalState={modalOpen} ></AuthForm>
 
         </div>
     )
