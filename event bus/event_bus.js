@@ -47,24 +47,15 @@ app.post("/api/events", async (req, res) => {
     // item_add, comment_moderate, tag_moderate, get_item 
     // new_item, new_comment, new_tag
 
-
-    if (type === 'get_item' || type === 'get_all_items') {
-        const response = await axios.post(`http://localhost:${ports.items_db}/api/events`, event).catch((er) => {
-            console.log(err.message);
-        });
-        console.log(await response.data)
-        res.status(201).send(await response.data);
-
     try {
         const event = req.body;
 
-        if (event.type === 'get_item') {
-
+        if (type === 'get_item' || type === 'get_all_items') {
             const response = await axios.post(`http://localhost:${ports.items_db}/api/events`, event).catch((er) => {
                 console.log(err.message);
             });
-            res.status(201).json(await response.json());
-        
+            console.log(await response.data)
+            res.status(201).json(await response.data);
         } 
 
         if (event.type === 'user_add') {
