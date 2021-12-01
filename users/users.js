@@ -67,7 +67,8 @@ app.post('/api/users/favorite_item', (req, res) => {
 				userID: userID,
 				itemID: itemID,
 			}
-		})		
+		})
+		res.status(200).end();		
 	}
 })
 

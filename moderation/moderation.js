@@ -27,8 +27,7 @@ app.use(express.json())
 //the post request either passed_moderation : "OK" || "FAIL"
 
 //let listOfBadWords = ["stupid","fuck"]
-let Filter = require('bad-words'),
-    filter = new Filter();
+
 
 // app.post('/moderation/new_tag', (req, res) => {
 //     let tag = req.body.tag
@@ -61,17 +60,18 @@ let Filter = require('bad-words'),
 //     }
 // })
 
-
+let Filter = require('bad-words'),
+    filter = new Filter();
 
 app.post('/api/events', async (req, res) => {
     try {
-        let body = req.body; //does this need to be here ??
+        let body = req.body; 
         let type = body.type;
         let data = body.data;
-        // console.log("HEOUAGSYDOUASGYDOUASGYDOAUSGDOUASGDYOASGYDUOASD")
+        
+        // moderate make sure comment is chill
         if (type === 'comment_moderate') {
             console.log("Moderating a comment.")
-            // moderate make sure comment is chill
             let comment = data.text
             let bad = false
             if(filter.clean(comment) !== comment) { bad = true }
@@ -79,27 +79,28 @@ app.post('/api/events', async (req, res) => {
                 //comment is chill
                 const response = await axios.post('http://localhost:4006/api/events', {
                     type: 'comment_add',
-                    // we have to fix this
+                    // we have to fix this -- better naming system
                     data: { tag: data.tag, itemID: itemID }
                 })
                 let data = await response.json()
             }
             else {
-                //comment isn't chill
-                //send to commentgraveyard
+                //comment isn't chill -> sent to graveyard
+                axios.post('http://localhost:4006/api/events', {
+                    type: 'comment_graveyard',
+                    data: { tag: data.tag, itemID: itemID }
+                })
             }
         }
+
+        //moderate to make sure tag is chill
         else if (type === 'tag_moderate') {
-            //moderate to make sure tag is chill
-            // console.log("Here?")
             console.log("Moderating tag...")
             let tag = data.tag
             let bad = false
             if(filter.clean(tag) !== tag) { bad = true }
             if(bad === false) {
-                // console.log("Hekjwhgds")
                 //tag is chill
-                
                 axios.post('http://localhost:4006/api/events', {
                     type: 'tag_add',
                     data: { tag: data.tag, itemID: itemID }
@@ -108,8 +109,11 @@ app.post('/api/events', async (req, res) => {
                 // let data = await response.json()
             }
             else {
-                //tag isn't chill
-                //send to taggraveyard 
+                //tag isn't chill -> send to graveyard
+                axios.post('http://localhost:4006/api/events', {
+                    type: 'tag_graveyard',
+                    data: { tag: data.tag, itemID: itemID }
+                }) 
             }
             res.end()
         }
