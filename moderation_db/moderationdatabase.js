@@ -30,8 +30,8 @@ app.post("/api/events"), (req, res) => {
   const { type, data } = req.body
   //there is no way this works
   //how do insert records into tables using the itemsID and data.tag from the 
-  var inserttag = "INSERT INTO taggraveyard (userid, tag) VALUES (itemID, data.tag)"
-  var insertcomment = "INSERT INTO commentgraveyard (userid, comment) VALUES (itemID, data.tag)"
+  //var inserttag = "INSERT INTO taggraveyard (userid, tag) VALUES (itemID, data.tag)"
+  //var insertcomment = "INSERT INTO commentgraveyard (userid, comment) VALUES (itemID, data.tag)"
   }
 
   if (type === 'comment_graveyard'){
@@ -46,9 +46,10 @@ app.post("/api/events"), (req, res) => {
       if (err) throw err
       console.log("1 record inserted into the taggraveyard")
   })
-  }
-
 }
+
+// running eventbus, itemsdb, items, moderation 
+
 
 
 
