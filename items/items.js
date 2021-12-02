@@ -239,7 +239,7 @@ app.post('/api/items/:item_id/add_tag', async (req, res) => {
       })
 
     //let data = await response.json()
-    res.end()
+      res.status(200).end()
   }
 })
 
@@ -257,6 +257,16 @@ app.post('/api/items/:item_id/add_comment', async (req, res) => {
                 // itemID: itemID,
                 userID: userID
             }
+        })
+
+        const data = await JSON.parse(response.config.data)
+        // console.log(await r)
+        // //console.log(data) 
+        // res.end()
+  
+        axios.post('http://localhost:4006/api/events', {
+          type: 'new_comment',
+          data: { text: data.text, itemID: data.itemID }
         })
 
         res.status(200).end()

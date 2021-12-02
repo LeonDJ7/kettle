@@ -92,10 +92,10 @@ app.post("/api/events", async (req, res) => {
         }
 
         if (event.type === "comment_add") {
-            const response = await axios.post(`http://localhost:${ports.items_db}/api/events`, event).catch((err) => {
+            await axios.post(`http://localhost:${ports.items_db}/api/events`, event).catch((err) => {
                 console.log(err);
             });
-            res.json(await response.json());
+            //res.json(await response.json());
         }
 
         if (event.type === 'tag_moderate') {

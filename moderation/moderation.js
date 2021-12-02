@@ -82,9 +82,9 @@ app.post('/api/events', async (req, res) => {
                 const response = await axios.post('http://localhost:4006/api/events', {
                     type: 'comment_add',
                     // we have to fix this -- better naming system
-                    data: { tag: data.tag, itemID: itemID }
+                    data: { text: text, itemID: itemID }
                 })
-                let data = await response.json()
+                // let data = await response.json()
             }
             else {
                 //comment isn't chill -> sent to graveyard
