@@ -184,6 +184,30 @@ app.post('/api/items/new_item', async (req, res) => {
     }
 })
 
+app.get('/api/items/get_all_items', async (req, res) => {
+  const response = await axios.post('http://localhost:4006/api/events', {
+    type: 'get_all_items',
+    data: {
+
+    }
+  })
+  const r = await response.data
+  console.log(await r)
+  res.send(await r)
+})
+
+app.get('/api/items/:item_id/get_item', async (req, res) => {
+  const response = await axios.post('http://localhost:4006/api/events', {
+    type: 'get_item',
+    data: {
+      item_id: req.params.item_id
+    }
+  })
+  const r = await response.data
+  console.log(await r)
+  res.send(await r[0])
+})
+
 // this one sends the tag to moderation and then to the database.
 app.post('/api/items/:item_id/add_tag', async (req, res) => {
     let userID = req.body.userID
@@ -203,9 +227,11 @@ app.post('/api/items/:item_id/add_tag', async (req, res) => {
       })
       //console.log(await response)
       //console.log(await response.config.data)
-      const { type, data } = JSON.parse(await response.config.data)
-      console.log(type)
-      console.log(data) 
+      // console.log(await response.config.data)
+      const data = await JSON.parse(response.config.data)
+      // console.log(await r)
+      // //console.log(data) 
+      // res.end()
 
       axios.post('http://localhost:4006/api/events', {
         type: 'new_tag',
@@ -213,7 +239,7 @@ app.post('/api/items/:item_id/add_tag', async (req, res) => {
       })
 
     //let data = await response.json()
-    res.end()
+      res.status(200).end()
   }
 })
 
@@ -231,6 +257,16 @@ app.post('/api/items/:item_id/add_comment', async (req, res) => {
                 // itemID: itemID,
                 userID: userID
             }
+        })
+
+        const data = await JSON.parse(response.config.data)
+        // console.log(await r)
+        // //console.log(data) 
+        // res.end()
+  
+        axios.post('http://localhost:4006/api/events', {
+          type: 'new_comment',
+          data: { text: data.text, itemID: data.itemID }
         })
 
         res.status(200).end()
