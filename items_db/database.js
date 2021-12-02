@@ -80,7 +80,7 @@ app.post("/api/events", (req, res) => {
         }
       }
     )
-  } else if (type === "new_tag") {
+  } else if (type === "tag_add") {
     console.log("Making a new tag")
     console.log(data)
     let tag = JSON.stringify(data.tag)
