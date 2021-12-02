@@ -55,7 +55,7 @@ app.post("/api/events", async (req, res) => {
         const event = req.body;
 
         if (type === 'get_item' || type === 'get_all_items') {
-            const response = await axios.post(`http://localhost:${ports.items_db}/api/events`, event).catch((er) => {
+            const response = await axios.post(`http://items-db:${ports.items_db}/api/events`, event).catch((er) => {
                 console.log(err.message);
             });
             console.log(await response.data)
@@ -64,7 +64,7 @@ app.post("/api/events", async (req, res) => {
 
         if (event.type === 'user_add') {
             
-            const response = axios.post(`http://localhost:${ports.users}/api/events`, event).catch((er) => {
+            const response = axios.post(`http://users:${ports.users}/api/events`, event).catch((er) => {
                 console.log(err);
             });
 
@@ -98,21 +98,21 @@ app.post("/api/events", async (req, res) => {
         }
     
         if (event.type === "comment_moderate") {
-            const response = await axios.post(`http://localhost:${ports.moderation}/api/events`, event).catch((err) => {
+            const response = await axios.post(`http://moderation:${ports.moderation}/api/events`, event).catch((err) => {
                 console.log(err);
             });
             res.json(await response.json());
         }
 
         if (event.type === "comment_vote") {
-            const response = await axios.post(`http://localhost:${ports.items_db}/api/events`, event).catch((err) => {
+            const response = await axios.post(`http://item-db:${ports.items_db}/api/events`, event).catch((err) => {
                 console.log(err);
             });
             res.json(await response.json());
         }
 
         if (event.type === "comment_add") {
-            await axios.post(`http://localhost:${ports.items_db}/api/events`, event).catch((err) => {
+            await axios.post(`http://items-db:${ports.items_db}/api/events`, event).catch((err) => {
                 console.log(err);
             });
             //res.json(await response.json());
@@ -120,7 +120,7 @@ app.post("/api/events", async (req, res) => {
 
         if (event.type === 'tag_moderate') {
             
-            await axios.post(`http://localhost:${ports.moderation}/api/events`, event).catch((er) => {
+            await axios.post(`http://moderation:${ports.moderation}/api/events`, event).catch((er) => {
                 console.log(err);
             })
 
@@ -128,7 +128,7 @@ app.post("/api/events", async (req, res) => {
 
         if (event.type === 'tag_vote') {
             
-            await axios.post(`http://localhost:${ports.users}/api/events`, event).catch((er) => {
+            await axios.post(`http://users:${ports.users}/api/events`, event).catch((er) => {
                 console.log(err);
             })
 
@@ -136,20 +136,10 @@ app.post("/api/events", async (req, res) => {
 
         if (event.type === 'tag_add') {
             
-            await axios.post(`http://localhost:${ports.items_db}/api/events`, event).catch((er) => {
+            await axios.post(`http://items-db:${ports.items_db}/api/events`, event).catch((er) => {
                 console.log(err);
             })
 
-        }
-
-        if(event.type === "top_tags") {
-            
-            const response = await axios.post(`http://localhost:${ports.items_db}/api/events`, event).catch((err) => {
-                console.log(err)
-            })
-            
-            res.status(response.status).json(response.data)
-            
         }
         
         //res.status(200).json({ status: "OK" });

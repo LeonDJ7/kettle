@@ -31,7 +31,7 @@ app.get('/api/users/favorites', (req, res) => {
 // res.status(404).end();
 // }
 	let userID = String(req.query.userID);
-	const response = await axios.post('http://localhost:4003/events', {
+	const response = await axios.post('http://even-bus:4006/events', {
 		type: 'favorite_get',
 		data: {
 			userID: userID
@@ -61,7 +61,7 @@ app.post('/api/users/favorite_item', (req, res) => {
 // } else {
 // res.status(404).end();
 // }
-		const response = await axios.post('http://localhost:4003/events', {
+		const response = await axios.post('http://event-bus:4006/events', {
 			type: 'favorite_add',
 			data: {
 				userID: userID,

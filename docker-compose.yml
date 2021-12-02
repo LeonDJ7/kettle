@@ -39,6 +39,10 @@ services:
     build: auth_db/.
     ports:
       - "4008:4008"
+  client:
+    build: client/.
+    ports:
+      - "3000:3000"
 
 volumes:
   pg_data: null
