@@ -76,21 +76,21 @@ app.post('/api/users/unfavorite_item', (req, res) => {
 	if (req.body.username === undefined || req.body.item_id === undefined) {
 		res.status(400).end();
 	} else {
-		if(users.hasOwnProperty(req.body.username)) {
-			let favorites = users[req.body.username].favorites;
-			if (!(favorites.includes(req.body.item_id))) {
-				res.status(404).end();
-			} else {
-				for (let i = 0; i < favorites.length; i++) {
-					if (req.body.item_id === favorites[i]) {
-						favorites.splice(i, 1);
-						res.status(200).send(users);
-					}
-				}
-			}
-		} else {
-			res.status(404).end();
-		}
+		// if(users.hasOwnProperty(req.body.username)) {
+		// 	let favorites = users[req.body.username].favorites;
+		// 	if (!(favorites.includes(req.body.item_id))) {
+		// 		res.status(404).end();
+		// 	} else {
+		// 		for (let i = 0; i < favorites.length; i++) {
+		// 			if (req.body.item_id === favorites[i]) {
+		// 				favorites.splice(i, 1);
+		// 				res.status(200).send(users);
+		// 			}
+		// 		}
+		// 	}
+		// } else {
+		// 	res.status(404).end();
+		// }
 	}
 })
 

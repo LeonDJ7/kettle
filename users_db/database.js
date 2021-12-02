@@ -18,8 +18,8 @@ const connection = mysql.createConnection({
 });
 
 // app.post("/api/events", (req, res) => {
-//     const { type, data } = req.body;
+//     let { type, data } = req.body;
 //     if (type === "favorite_get") {
-
+// 		let 
 //     }
 // }
