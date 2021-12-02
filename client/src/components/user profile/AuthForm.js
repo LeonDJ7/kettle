@@ -70,12 +70,16 @@ const AuthForm = (props) => {
             return
         }
         
-        fetch("http://localhost:4000/api/auth/sign_up", {
+        fetch("http://localhost:4006/api/events", {
             method: "POST",
-            body: {
-                email: signupEmail,
-                pass: signupPassword
-            }
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                "type": "user_signup",
+                "data": {
+                    email: signupEmail,
+                    pass: signupPassword
+                }
+            })
         })
         .then((res) => {
             return res.json()
@@ -102,12 +106,16 @@ const AuthForm = (props) => {
     const handleLoginSubmit = e => {
         console.log(e)
 
-        fetch("http://localhost:4000/api/auth/log_in", {
+        fetch("http://localhost:4006/api/events", {
             method: "POST",
-            body: {
-                email: signupEmail,
-                pass: signupPassword
-            }
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                "type": "user_login",
+                "data": {
+                    email: loginEmail,
+                    pass: loginPassword
+                }
+            })
         })
         .then((res) => {
             return res.json()
@@ -145,8 +153,8 @@ const AuthForm = (props) => {
 
                 <span class={classes.authTypeLbl} style={{marginTop: '1rem'}}> Login </span>
                 <span class={classes.loginForm}>
-                    <TextField value={loginEmail} label="Email" variant='filled' type='email' required onClick={(e) => {setLoginEmail(e.target.value)}} />
-                    <TextField value={loginPassword} label="Password" variant='filled' type='password' required onClick={(e) => {setLoginPassword(e.target.value)}} />
+                    <TextField value={loginEmail} label="Email" variant='filled' type='email' required onChange={(e) => {setLoginEmail(e.target.value)}} />
+                    <TextField value={loginPassword} label="Password" variant='filled' type='password' required onChange={(e) => {setLoginPassword(e.target.value)}} />
                     <Button onClick={handleLoginSubmit} > Login </Button>
                 </span>
             </Box>

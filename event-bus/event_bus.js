@@ -1,7 +1,9 @@
 const express = require("express");
 const axios = require("axios");
+const cors = require('cors')
 
 const app = express();
+app.use(cors())
 app.use(express.json());
 const port = process.env.EVENT_BUS_PORT || 4006
 
@@ -140,7 +142,7 @@ app.post("/api/events", async (req, res) => {
 
         }
         
-        res.status(200).json({ status: "OK" });
+        //res.status(200).json({ status: "OK" });
     }
     catch (err) {
         res.status(400).send(err)
