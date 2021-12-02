@@ -4,6 +4,8 @@ const express = require('express')
 const cors = require('cors')
 const path = require('path')
 const { receiveMessageOnPort } = require('worker_threads')
+const axios = require('axios')
+
 
 const app = express()
 const port = process.env.USER_PORT || 4004
@@ -98,12 +100,13 @@ app.post('/api/events', async (req, res) => {
             console.log("Moderating tag...")
             let tag = data.tag
             let bad = false
+            console.log(data)
             if(filter.clean(tag) !== tag) { bad = true }
             if(bad === false) {
                 //tag is chill
                 axios.post('http://localhost:4006/api/events', {
                     type: 'tag_add',
-                    data: { tag: data.tag, itemID: itemID }
+                    data: { tag: data.tag, itemID: data.itemID }
                 }) 
                 // console.log("lajshdasd")
                 // let data = await response.json()
@@ -118,6 +121,7 @@ app.post('/api/events', async (req, res) => {
             res.end()
         }
     } catch (err) { 
+        console.log(err)
         console.log("Error here....")
         res.status(500).send(err) 
     }

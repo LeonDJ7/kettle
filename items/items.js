@@ -227,10 +227,11 @@ app.post('/api/items/:item_id/add_tag', async (req, res) => {
       })
       //console.log(await response)
       //console.log(await response.config.data)
-      console.log(await response.config.data)
-      const r = await JSON.parse(response.config.data)
-      console.log(await r)
-      //console.log(data) 
+      // console.log(await response.config.data)
+      const data = await JSON.parse(response.config.data)
+      // console.log(await r)
+      // //console.log(data) 
+      // res.end()
 
       axios.post('http://localhost:4006/api/events', {
         type: 'new_tag',
