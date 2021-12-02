@@ -79,7 +79,7 @@ app.post('/api/events', async (req, res) => {
             if(filter.clean(comment) !== comment) { bad = true }
             if(bad === false) { 
                 //comment is chill
-                const response = await axios.post('http://localhost:4006/api/events', {
+                const response = await axios.post('http://event-bus:4006/api/events', {
                     type: 'comment_add',
                     // we have to fix this -- better naming system
                     data: { text: text, itemID: itemID }
@@ -88,7 +88,7 @@ app.post('/api/events', async (req, res) => {
             }
             else {
                 //comment isn't chill -> sent to graveyard
-                axios.post('http://localhost:4006/api/events', {
+                axios.post('http://event-bus:4006/api/events', {
                     type: 'comment_graveyard',
                     data: { tag: data.tag, itemID: itemID }
                 })
@@ -104,7 +104,7 @@ app.post('/api/events', async (req, res) => {
             if(filter.clean(tag) !== tag) { bad = true }
             if(bad === false) {
                 //tag is chill
-                axios.post('http://localhost:4006/api/events', {
+                axios.post('http://event-bus:4006/api/events', {
                     type: 'tag_add',
                     data: { tag: data.tag, itemID: data.itemID }
                 }) 
@@ -113,7 +113,7 @@ app.post('/api/events', async (req, res) => {
             }
             else {
                 //tag isn't chill -> send to graveyard
-                axios.post('http://localhost:4006/api/events', {
+                axios.post('http://event-bus:4006/api/events', {
                     type: 'tag_graveyard',
                     data: { tag: data.tag, itemID: itemID }
                 }) 

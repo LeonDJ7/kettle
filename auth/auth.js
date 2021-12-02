@@ -11,7 +11,7 @@ const port = process.env.AUTH_PORT || 4000
 app.use(cors())
 app.use(express.json())
 
-axios.create({baseURL: `https://localhost:${port}`})
+axios.create({baseURL: `https://auth:${port}`})
 
 app.post('/api/auth/sign_up', async (req, res) => {
     const email = req.body.email
@@ -23,7 +23,7 @@ app.post('/api/auth/sign_up', async (req, res) => {
     else {
         //send to database microservice
         try {
-            const response = await axios.post('http://localhost:4008/api/auth/sign_up', {
+            const response = await axios.post('http://auth-db:4008/api/auth/sign_up', {
                 email: email,
                 pass: pass
             })
@@ -46,7 +46,7 @@ app.get('/api/auth/log_in', async (req, res) => {
     else {
         //send to database microservice
         try {
-            const response = await axios.get(`http://localhost:4008/api/auth/log_in?email=${email}&pass=${pass}`)
+            const response = await axios.get(`http://auth-db:4008/api/auth/log_in?email=${email}&pass=${pass}`)
 
             res.status(response.status).send(response.data)
         }
@@ -65,7 +65,7 @@ app.post('/api/events', async (req, res) => {
 
     if(type === "user_signup") {
         try {
-            const response = await axios.post(`http://localhost:${port}/api/auth/sign_up`, {
+            const response = await axios.post(`http://auth:${port}/api/auth/sign_up`, {
                 email: data.email,
                 pass: data.pass
             })
@@ -79,7 +79,7 @@ app.post('/api/events', async (req, res) => {
     }
     else if(type == "user_login") {
         try {
-            const response = await axios.get(`http://localhost:${port}/api/auth/log_in?email=${data.email}&pass=${data.pass}`)
+            const response = await axios.get(`http://auth:${port}/api/auth/log_in?email=${data.email}&pass=${data.pass}`)
 
             res.status(response.status).send(response.data)
         }

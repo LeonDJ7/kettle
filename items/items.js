@@ -142,7 +142,7 @@ const items = {
 
 // app.get('/api/items/get_item', async (req, res) => {
 //     let itemID = String(req.query.item_id)
-//     const response = await axios.post('http://localhost:4006/events', {
+//     const response = await axios.post('http://event-bus:4006/events', {
 //       type: 'item_get',
 //       data: {
 //         itemID: itemID
@@ -165,7 +165,7 @@ app.post('/api/items/new_item', async (req, res) => {
       ) { 
         res.status(400).end()
     } else {
-      const response = await axios.post('http://localhost:4006/events', {
+      const response = await axios.post('http://event-bus:4006/events', {
         type: 'new_item',
         data: {
           imageURL: imageURL,
@@ -185,7 +185,7 @@ app.post('/api/items/new_item', async (req, res) => {
 })
 
 app.get('/api/items/get_all_items', async (req, res) => {
-  const response = await axios.post('http://localhost:4006/api/events', {
+  const response = await axios.post('http://event-bus:4006/api/events', {
     type: 'get_all_items',
     data: {
 
@@ -197,7 +197,7 @@ app.get('/api/items/get_all_items', async (req, res) => {
 })
 
 app.get('/api/items/:item_id/get_item', async (req, res) => {
-  const response = await axios.post('http://localhost:4006/api/events', {
+  const response = await axios.post('http://event-bus:4006/api/events', {
     type: 'get_item',
     data: {
       item_id: req.params.item_id
@@ -217,7 +217,7 @@ app.post('/api/items/:item_id/add_tag', async (req, res) => {
       res.status(400).end()
     } else {
         // the port has changed and this will be irrelevent
-      const response = await axios.post('http://localhost:4006/api/events', {
+      const response = await axios.post('http://event-bus:4006/api/events', {
         type: 'tag_moderate',
         data: {
             tag: tag,
@@ -233,7 +233,7 @@ app.post('/api/items/:item_id/add_tag', async (req, res) => {
       // //console.log(data) 
       // res.end()
 
-      axios.post('http://localhost:4006/api/events', {
+      axios.post('http://event-bus:4006/api/events', {
         type: 'new_tag',
         data: { tag: data.tag, itemID: data.itemID }
       })
@@ -250,7 +250,7 @@ app.post('/api/items/:item_id/add_comment', async (req, res) => {
     if (userID === undefined || text === undefined) {
       res.status(400).end()
     } else {
-        const response = await axios.post('http://localhost:4006/events', {
+        const response = await axios.post('http://event-bus:4006/events', {
             type: 'comment_moderate',
             data: {
                 text: text,
@@ -264,7 +264,7 @@ app.post('/api/items/:item_id/add_comment', async (req, res) => {
         // //console.log(data) 
         // res.end()
   
-        axios.post('http://localhost:4006/api/events', {
+        axios.post('http://event-bus:4006/api/events', {
           type: 'new_comment',
           data: { text: data.text, itemID: data.itemID }
         })
@@ -285,12 +285,12 @@ app.post('/api/items/:item_id/add_comment', async (req, res) => {
 app.post("/api/events", async (req, res) => {
   let type = req.body.type
   if (type === 'tag_add') {
-    const response = await axios.post('http://localhost:4006/events', {
+    const response = await axios.post('http://event-bus:4006/events', {
       type: 'new_tag',
       data: req.body
     })
   } else if (type === 'comment_add') {
-    const response = await axios.post('http://localhost:4006/events', {
+    const response = await axios.post('http://event-bus:4006/events', {
       type: 'new_comment',
       data: req.body
     })
