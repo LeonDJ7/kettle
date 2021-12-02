@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/LeonDJ7/kettle#readme",
   "dependencies": {
+    "axios": "^0.24.0",
     "mysql": "^2.18.1"
   },
   "main": "index.js",

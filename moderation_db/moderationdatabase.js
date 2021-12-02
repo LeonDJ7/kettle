@@ -33,7 +33,7 @@ app.post("/api/events"), (req, res) => {
   //how do insert records into tables using the itemsID and data.tag from the 
   //var inserttag = "INSERT INTO taggraveyard (userid, tag) VALUES (itemID, data.tag)"
   //var insertcomment = "INSERT INTO commentgraveyard (userid, comment) VALUES (itemID, data.tag)"
-  }
+  
 
   if (type === 'comment_graveyard'){
     connection.query('INSERT INTO commentgraveyard (userid, tag) VALUES (?, ?)', [itemID, data.tag], function(err, result) {
@@ -42,11 +42,12 @@ app.post("/api/events"), (req, res) => {
     })
   }
 
-  else if (type === 'tag_graveyard'){
+  if (type === 'tag_graveyard'){
     connection.query(inserttag, function(err, result) {
       if (err) throw err
       console.log("1 record inserted into the taggraveyard")
   })
+  }
 }
 
 // running eventbus, itemsdb, items, moderation 
