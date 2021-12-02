@@ -4,12 +4,13 @@
   "description": "## author: Ruby Ramsay",
   "main": "moderation.js",
   "scripts": {
-    "start": "node items_db",
+    "start": "node moderation.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.24.0",
     "bad-words": "^3.0.4",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",

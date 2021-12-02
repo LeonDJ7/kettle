@@ -1,6 +1,16 @@
 version: '3.8'
 
 services:
+  mysql-development:
+    image: mysql:8.0.17
+    environment:
+      MYSQL_ROOT_PASSWORD: samsam98
+      MYSQL_DATABASE: items
+    ports:
+      - "3308:3308"
+    volumes:
+      - "./config/my.conf:/etc/mysql/conf.d/config-file.cnf"
+      - "./data:/var/lib/mysql:rw"
   auth:
     build: auth/.
     ports:
@@ -17,10 +27,6 @@ services:
       - "4002:4002"
     depends_on:
     - "items-db"
-  users:
-    build: users/.
-    ports:
-      - "4003:4003"
   moderation:
     build: moderation/.
     ports:
@@ -35,14 +41,9 @@ services:
     build: items_db/.
     ports:
       - "4007:4007"
+    depends_on:
+      - mysql-development
   auth-db:
     build: auth_db/.
     ports:
       - "4008:4008"
-  client:
-    build: client/.
-    ports:
-      - "3000:3000"
-
-volumes:
-  pg_data: null

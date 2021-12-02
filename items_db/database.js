@@ -39,7 +39,7 @@ const testComment = '{ "text": "i like this enough to see this again" }'
 
 const mysql = require('mysql')
 const connection = mysql.createConnection({
-  host: 'localhost',
+  host: 'itemsdb',
   user: 'root',
   password: 'samsam98',
   database: 'itemsdb'
