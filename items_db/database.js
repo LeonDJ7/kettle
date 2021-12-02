@@ -37,9 +37,9 @@ const testItem = {
 const testTag = '{"tag": "strange", "userID": 0123176253}'
 const testComment = '{ "text": "i like this enough to see this again" }'
 
-const mysql = require('mysql')
+const mysql = require('mysql2')
 const connection = mysql.createConnection({
-  host: 'itemsdb',
+  host: 'db',
   user: 'root',
   password: 'samsam98',
   database: 'itemsdb'
