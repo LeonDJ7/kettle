@@ -1,4 +1,5 @@
 import React from 'react'
+import { useHistory } from 'react-router-dom';
 
 import {
     makeStyles,createStyles, TextField, Button, Divider, Modal
@@ -50,6 +51,7 @@ const useStyles = makeStyles((theme) =>
 const AuthForm = (props) => {
 
     const classes = useStyles();
+    const history = useHistory();
 
     const [signupEmail, setSignupEmail] = React.useState('')
     const [signupPassword, setSignupPassword] = React.useState('')
@@ -62,15 +64,70 @@ const AuthForm = (props) => {
     }, [])
 
     const handleSignupSubmit = e => {
-        console.log(e)
 
-        // fetch request to auth
+        if (signupConfirmPassword !== signupPassword) {
+            console.log('password and confirm password do not match')
+            return
+        }
+        
+        fetch("http://localhost:4000/api/auth/sign_up", {
+            method: "POST",
+            body: {
+                email: signupEmail,
+                pass: signupPassword
+            }
+        })
+        .then((res) => {
+            return res.json()
+        })
+        .then((data) => {
+
+            // update localStorage values
+            console.log(data)
+            let email = signupEmail
+            window.localStorage.setItem('email', email)
+
+            // send user to profile page
+            history.push({
+                pathname: `/user_profile`,
+            })
+
+        })
+        .catch((err) => {
+            console.log(err)
+        })
+        
     }
 
     const handleLoginSubmit = e => {
         console.log(e)
 
-        // fetch request to auth
+        fetch("http://localhost:4000/api/auth/log_in", {
+            method: "POST",
+            body: {
+                email: signupEmail,
+                pass: signupPassword
+            }
+        })
+        .then((res) => {
+            return res.json()
+        })
+        .then((data) => {
+
+            // update localStorage values
+            console.log(data)
+            let email = loginEmail
+            window.localStorage.setItem('email', email)
+
+            // send user to profile page
+            history.push({
+                pathname: `/user_profile`,
+            })
+            
+        })
+        .catch((err) => {
+            console.log(err)
+        })
     }
         
     return (

@@ -1,7 +1,7 @@
 import React from 'react'
 
 import {
-    makeStyles,createStyles, TextField, Button, Divider, Modal
+    makeStyles,createStyles, TextField, Button, Modal
 } from '@material-ui/core'
 import { Box } from '@mui/system';
 

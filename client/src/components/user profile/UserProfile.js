@@ -1,7 +1,8 @@
 import React from 'react'
+import { useHistory } from 'react-router-dom';
 
 import {
-    makeStyles,createStyles
+    makeStyles,createStyles, Button
 } from '@material-ui/core'
 
 import editProfileImg from '../../images/edit_profile.png'
@@ -75,6 +76,20 @@ const useStyles = makeStyles((theme) =>
             fontWeight: 1000,
             color: 'white',
             alignSelf: 'flex-start'
+        },
+
+        logOutButton: {
+            alignSelf: 'flex-start',
+            backgroundColor: '#E5B1B1',
+            border: 'none',
+            width: '10rem',
+            height: '2.6rem',
+            cursor: 'pointer',
+            borderRadius: '3px',
+            color: 'white',
+            fontWeight: 800,
+            fontSize: '1rem',
+            marginTop: '5rem'
         }
 
     }),
@@ -83,8 +98,10 @@ const useStyles = makeStyles((theme) =>
 const UserProfile = (props) => {
 
     const classes = useStyles();
+    const history = useHistory();
+
     const [favorites, setFavorites] = React.useState({})
-    const email = window.localStorage.getItem('email')
+    const email = 'leondjust@me.com'// window.localStorage.getItem('email')
     
     React.useEffect( () => {
 
@@ -111,12 +128,21 @@ const UserProfile = (props) => {
         setFavorites(favoritesSorted)
     }
 
+    const logout = () => {
+
+        window.localStorage.clear()
+
+        // send user to home page
+        history.push({
+            pathname: `/art`,
+        })
+    }
+
     return (
         <React.Fragment>
         
             <div class={classes.root} >
-                <span class={classes.name}> {user.name} </span>
-                <span class={classes.email}> {user.email} </span>
+                <span class={classes.name}> {email} </span>
                 <span class={classes.categories}>
                     { Object.keys(favorites).map((category) => {
                         return (
@@ -138,6 +164,10 @@ const UserProfile = (props) => {
                     }) }
                 </span>
                 
+                <Button class={classes.logOutButton} onClick={logout}>
+                    log out
+                </Button>
+                
             </div>
 
         </React.Fragment>
@@ -145,12 +175,6 @@ const UserProfile = (props) => {
 }
 
 export default UserProfile
-
-let user = {
-    name: 'Leon Djusberg',
-    email: 'leondjust@me.com',
-    id: 1
-}
 
 let favoritesFake = [
     {

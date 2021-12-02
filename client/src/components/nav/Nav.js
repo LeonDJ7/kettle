@@ -120,11 +120,11 @@ const Nav = (props) => {
                 }
 
                 { window.localStorage.getItem('email') && 
-                    <Link to={`/user_profile/${window.localStorage.getItem('id')}`} style={{ height: '100%'}}>
+                    <Link to={`/user_profile`} style={{ height: '100%'}}>
                         { pathname !== '/user_profile' && <div class={classes.optionsButton} style={{display: 'flex', alignItems: 'center'}} id='3' onClick={() => {setPathname('/user_profile')}} >
                             <img src={accountBox} alt='' style={{ width: '48px', height: '48px' }}></img>
                         </div> }
-                        { pathname === '/user_profile' && <div style={{ display: 'flex', alignItems: 'center', outline: '8px solid white' }} class={classes.optionsButton} id='3' onClick={() => {setPathname('/user_profile')}}> 
+                        { pathname === '/user_profile' && <div style={{ display: 'flex', alignItems: 'center' }} class={classes.optionsButton} id='3' onClick={() => {setPathname('/user_profile')}}> 
                             <img src={accountBox} alt='' style={{ width: '48px', height: '48px' }}></img>
                         </div> }
                     </Link>

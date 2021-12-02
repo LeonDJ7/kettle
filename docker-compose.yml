@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  auth:
+    build: auth/.
+    ports:
+      - "4000:4000"
+    depends_on:
+    - "auth-db"
+  event-bus:
+    build: event-bus/.
+    ports:
+      - "4001:4001"
+  items:
+    build: items/.
+    ports:
+      - "4002:4002"
+    depends_on:
+    - "items-db"
+  users:
+    build: users/.
+    ports:
+      - "4003:4003"
+  moderation:
+    build: moderation/.
+    ports:
+      - "4004:4004"
+    depends_on:
+      - "moderation-db"
+  moderation-db:
+    build: moderation_db/.
+    ports:
+      - "4006:4006"
+  items-db:
+    build: items_db/.
+    ports:
+      - "4007:4007"
+  auth-db:
+    build: auth_db/.
+    ports:
+      - "4008:4008"
+
+volumes:
+  pg_data: null

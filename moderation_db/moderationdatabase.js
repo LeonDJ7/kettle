@@ -46,8 +46,7 @@ app.post("/api/events"), (req, res) => {
       if (err) throw err
       console.log("1 record inserted into the taggraveyard")
   })
-  }
-
+  
 }
 
 

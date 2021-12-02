@@ -37,6 +37,29 @@ const Search = (props) => {
 
     const classes = useStyles();
     const history = useHistory();
+
+    const [items, setItems] = React.useState([])
+
+    React.useEffect(() => {
+
+        loadItems()
+
+    }, [])
+
+    const loadItems = () => {
+
+        fetch('http://localhost:4002/api/items/get_all_items')
+        .then(res => {
+            return res.json()
+        })
+        .then(data => {
+            setItems(data)
+        })
+        .catch( err => {
+            console.log(err)
+        })
+
+    }
     
     const handleChange = (selectedValue) => {
         let id = selectedValue.id
@@ -54,7 +77,7 @@ const Search = (props) => {
                 <Autocomplete
                     freeSolo
                     disableClearable
-                    options={dummyData.map((item) => { return { label: item.name + ' - ' + item.artist, id: item.id } })}
+                    options={items.map((item) => { return { label: item.name + ' - ' + item.artist, id: item.id } })}
                     onChange={(event, selectedValue) => handleChange(selectedValue)}
                     renderInput={(params) => (
                         <TextField

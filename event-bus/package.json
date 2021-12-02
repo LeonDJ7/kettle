@@ -4,6 +4,7 @@
   "description": "",
   "main": "event_bus.js",
   "scripts": {
+    "start": "node event_bus.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

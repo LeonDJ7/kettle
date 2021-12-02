@@ -14,8 +14,7 @@ const Main = (props) => {
             <Route exact path='/art/:id' component={Item} />
             <Route exact path='/request' component={Request} />
             <Route exact path='/discover' component={Discover} />
-            <Route exact path='/user_profile' component={AuthForm} />
-            <Route exact path='/user_profile/:id' component={UserProfile} />
+            <Route exact path='/user_profile' component={UserProfile} />
         </Switch>
         
     )

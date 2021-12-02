@@ -4,6 +4,7 @@
   "description": "# Overview and Purpose This microservice handles the authorization of users in Kettle. It creates, logs in, and logs out users from the database.",
   "main": "auth.js",
   "scripts": {
+    "start": "node auth.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
