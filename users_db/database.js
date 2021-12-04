@@ -31,8 +31,8 @@ let userID = JSON.stringify(data.userID);
 			}
 		})
 	} else if (type === "favorite_add") {
-
+		let item = parseInt(data.itemID);
 	} else if (type === "favorite_remove") {
-		
+
 	}
 })
