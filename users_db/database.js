@@ -32,7 +32,16 @@ let userID = JSON.stringify(data.userID);
 		})
 	} else if (type === "favorite_add") {
 		let item = parseInt(data.itemID);
+		connection.query("UPDATE users SET favorites = JSON_ARRAY_APPEND(favorites, '$', ?) WHERE ID = ?", [favorite, item],
+		(err, result) => {
+			if (err) {
+				res.status(404).end()
+			} else {
+				console.log(result)
+				res.status(201).json(result)
+			}
+		})
 	} else if (type === "favorite_remove") {
-
+		let item = parseInt(data.itemID);
 	}
 })
