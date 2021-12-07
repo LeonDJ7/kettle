@@ -11,25 +11,20 @@ app.use(express.urlencoded())
 app.use(cors())
 app.use(express.json())
 
-let users = {
-	"testuser0": {
-		id: 0,
-		favorites: [],
-		tags: []
-	},
-	"testuser1": {
-		id: 1,
-		favorites: [],
-		tags: []
-	}
-}
-
-app.get('/api/users/favorites', (req, res) => {
-// if (users.hasOwnProperty(req.query.username)) {
-// res.status(200).send(users[req.query.username].favorites);
-// } else {
-// res.status(404).end();
+// let users = {
+// 	"testuser0": {
+// 		id: 0,
+// 		favorites: [],
+// 		tags: []
+// 	},
+// 	"testuser1": {
+// 		id: 1,
+// 		favorites: [],
+// 		tags: []
+// 	}
 // }
+
+app.get('/api/users/favorites', async (req, res) => {
 	let userID = String(req.query.userID);
 	const response = await axios.post('http://event-bus:4003/events', {
 		type: 'favorite_get',
@@ -37,12 +32,12 @@ app.get('/api/users/favorites', (req, res) => {
 			userID: userID
 		}
 	})
-	.then(function (response) {
-		res.status(200).send(await response.json());
-	})
+	const r = await response.data
+	console.log(await r)
+	res.send(await r[0])
 })
 
-app.post('/api/users/favorite_item', (req, res) => {
+app.post('/api/users/favorite_item', async (req, res) => {
 	console.log(req.body);
 	let userID = req.body.userID;
 	let itemID = req.body.item_id;
@@ -61,7 +56,7 @@ app.post('/api/users/favorite_item', (req, res) => {
 	}
 })
 
-app.post('/api/users/unfavorite_item', (req, res) => {
+app.post('/api/users/unfavorite_item', async (req, res) => {
 	if (req.body.username === undefined || req.body.item_id === undefined) {
 		res.status(400).end();
 	} else {
@@ -79,20 +74,20 @@ app.post('/api/users/unfavorite_item', (req, res) => {
 
 
 if (process.platform === "win32") {
-var rl = require("readline").createInterface({
-  input: process.stdin,
-  output: process.stdout
-});
+	var rl = require("readline").createInterface({
+		input: process.stdin,
+		output: process.stdout
+	});
   
-rl.on("SIGINT", function () {
-  process.emit("SIGINT");
-});
-  }
+	rl.on("SIGINT", function () {
+		process.emit("SIGINT");
+	});
+}
   
-  process.on("SIGINT", async function () {
-process.exit();
-  });
+process.on("SIGINT", async function () {
+	process.exit();
+});
 
 app.listen(port, () => {
-console.log(`server listening on the port::${port}`)
+	console.log(`server listening on the port::${port}`)
 })
